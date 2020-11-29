@@ -7,26 +7,33 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
-  DeviceEventEmitter
+  Animated,
+  BackHandler,
+  Easing,
+  Image,
+  DeviceEventEmitter,
 } from "react-native";
 import { Picker } from "@react-native-community/picker"
 import { RNSerialport, definitions, actions } from "react-native-serialport";
-//type Props = {};
+import Header from "./header"
 class ManualConnection extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       servisStarted: false,
       connected: false,
       usbAttached: false,
       output: "",
       outputArray: [],
-      baudRate: "115200",
+      baudRate: "9600",
       interface: "-1",
       selectedDevice: null,
       deviceList: [{ name: "Device Not Found", placeholder: true }],
-      sendText: "HELLO",
+      page: 0,
+      selectedNetwork: "",
+      networkPassword: "",
+      availableNetworks: [],
+      rotation: 0,
       returnedDataType: definitions.RETURNED_DATA_TYPES.HEXSTRING
     };
 
@@ -34,15 +41,28 @@ class ManualConnection extends Component {
     this.stopUsbListener = this.stopUsbListener.bind(this);
   }
 
+  backAction = () => {
+    if (this.state.page == 0) BackHandler.exitApp()
+    else this.setState(prev => ({ page: prev.page - 1 }))
+    return true;
+  };
+
   componentDidMount() {
+
     this.startUsbListener();
   }
 
+
   componentWillUnmount() {
+
     this.stopUsbListener();
   }
 
   startUsbListener() {
+
+
+    DeviceEventEmitter.addListener("hardwareBackPress", this.backAction, this)
+
     DeviceEventEmitter.addListener(
       actions.ON_SERVICE_STARTED,
       this.onServiceStarted,
@@ -127,6 +147,7 @@ class ManualConnection extends Component {
       this.state.returnedDataType === definitions.RETURNED_DATA_TYPES.HEXSTRING
     ) {
       const payload = RNSerialport.hexToUtf16(data.payload);
+      if (payload.includes("{<wifis")) Alert.alert(payload)
       this.setState({ output: this.state.output + payload });
     }
   }
@@ -135,21 +156,6 @@ class ManualConnection extends Component {
     console.error(error);
   }
 
-  handleConvertButton() {
-    let data = "";
-    if (
-      this.state.returnedDataType === definitions.RETURNED_DATA_TYPES.HEXSTRING
-    ) {
-      data = RNSerialport.hexToUtf16(this.state.output);
-    } else if (
-      this.state.returnedDataType === definitions.RETURNED_DATA_TYPES.INTARRAY
-    ) {
-      data = RNSerialport.intArrayToUtf16(this.state.outputArray);
-    } else {
-      return;
-    }
-    this.setState({ output: data });
-  }
   fillDeviceList = async () => {
     try {
       const deviceList = await RNSerialport.getDeviceList();
@@ -168,6 +174,7 @@ class ManualConnection extends Component {
       );
     }
   };
+
   devicePickerItems() {
     return this.state.deviceList.map((device, index) =>
       !device.placeholder ? (
@@ -178,13 +185,35 @@ class ManualConnection extends Component {
     );
   }
 
-  handleSendButton() {
-    RNSerialport.writeString(this.state.sendText);
+  handleSendButton(msg) {
+    if (msg == "list") {
+      RNSerialport.writeString("{<wifi::list>}");
+    }
+    else if (msg == "connect") {
+      RNSerialport.writeString(`{<wifi::${this.state.selectedNetwork}||${this.state.networkPassword}>}`);
+    }
   }
+
   handleClearButton() {
-    this.setState({ output: "" });
-    this.setState({ outputArray: [] });
+    this.setState({ availableNetworks: [] });
   }
+
+  postData = async () => {
+    console.log('Requesting config data from Nana Server...');
+    const json = await fetch('http://iot.nana.sa/', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      },
+      body: JSON.stringify({
+        mac_address: "AA:AA:AA:AA:AA:AA",
+        serial_number: "NAble1",
+        is_all: true
+      })
+    });
+    const data = json.json();
+    return data["result"]["device"];
+  } // postData.then(data => ....)
 
   checkSupport() {
     if (
@@ -224,188 +253,338 @@ class ManualConnection extends Component {
       : Object.assign({}, styles.button, { backgroundColor: "#C0C0C0" });
   };
 
+  readFrom = (message) => {
+    const x = message.indexOf("::");
+    if (x > 0) // && message.startsWith("{<") && message.endsWith(">}"))
+    {
+      const key = message.substring(2, x);
+      const value = message.substring(x + 2, message.length - 3);
+      return { key, value }
+    }
+    return {}
+  }
+
   render() {
+    const spinValue = new Animated.Value(0);
+    const spinValue2 = new Animated.Value(0);
+
+    Animated.loop(
+      Animated.timing(
+        spinValue,
+        {
+          toValue: 1,
+          duration: 12000,
+          easing: Easing.linear,
+          useNativeDriver: true
+        }
+      )
+    ).start();
+    Animated.loop(
+      Animated.timing(
+        spinValue2,
+        {
+          toValue: 1,
+          duration: 16000,
+          easing: Easing.linear,
+          useNativeDriver: true
+        }
+      )
+    ).start();
+
+    // Next, interpolate beginning and end values (in this case 0 and 1)
+    const spin = spinValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['0deg', '360deg']
+    })
+    const spin2 = spinValue2.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['0deg', '360deg']
+    })
+
     return (
-      <ScrollView style={styles.body}>
-        <View style={styles.container}>
-          <View style={styles.header}>
-            <View style={styles.line}>
-              <Text style={styles.title}>Service:</Text>
-              <Text style={styles.value}>
-                {this.state.servisStarted ? "Started" : "Not Started"}
-              </Text>
-            </View>
-            <View style={styles.line}>
-              <Text style={styles.title}>Usb:</Text>
-              <Text style={styles.value}>
-                {this.state.usbAttached ? "Attached" : "Not Attached"}
-              </Text>
-            </View>
-            <View style={styles.line}>
-              <Text style={styles.title}>Connection:</Text>
-              <Text style={styles.value}>
-                {this.state.connected ? "Connected" : "Not Connected"}
-              </Text>
-            </View>
-          </View>
-          <ScrollView style={styles.output} nestedScrollEnabled={true}>
-            <Text style={styles.full}>
-              {this.state.output === "" ? "No Content" : this.state.output}
+      <View style={styles.view}>
+        <Header />
+        {this.state.page == 0 &&
+          <View style={styles.startButtons}>
+            <TouchableOpacity style={styles.startButton} onPress={() => this.setState({ page: 1 })}>
+              <Text style={styles.startButtonText}>
+                WiFi Settings
             </Text>
-          </ScrollView>
-
-          <View style={styles.inputContainer}>
-            <Text>Send</Text>
-            <TextInput
-              style={styles.textInput}
-              onChangeText={text => this.setState({ sendText: text })}
-              value={this.state.sendText}
-              placeholder={"Send Text"}
-            />
-          </View>
-          <View style={styles.line2}>
-            <TouchableOpacity
-              style={this.buttonStyle(this.state.connected)}
-              onPress={() => this.handleSendButton()}
-              disabled={!this.state.connected}
-            >
-              <Text style={styles.buttonText}>Send</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => this.handleClearButton()}
-            >
-              <Text style={styles.buttonText}>Clear</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => this.handleConvertButton()}
-            >
-              <Text style={styles.buttonText}>Convert</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.line2}>
-            <View style={styles.inputContainer}>
-              <Text>Baud Rate</Text>
-              <TextInput
-                style={styles.textInput}
-                onChangeText={text => this.setState({ baudRate: text })}
-                value={this.state.baudRate}
-                placeholder={"Baud Rate"}
-              />
-            </View>
-            <View style={styles.inputContainer}>
-              <Text>Interface</Text>
-              <TextInput
-                style={styles.textInput}
-                onChangeText={text => this.setState({ interface: text })}
-                value={this.state.interface}
-                placeholder={"Interface"}
-              />
-            </View>
-          </View>
-          <View style={styles.inputContainer}>
-            <Text>Device List</Text>
-            <Picker
-              enabled={
-                this.state.deviceList.length > 0 &&
-                !this.state.deviceList[0].placeholder
-              }
-              selectedValue={this.state.selectedDevice}
-              onValueChange={(value, index) =>
-                this.setState({ selectedDevice: value })
-              }
-            >
-              {this.devicePickerItems()}
-            </Picker>
-          </View>
-          <TouchableOpacity
-            style={this.buttonStyle(this.state.selectedDevice)}
-            // disabled={!this.state.selectedDevice}
-            onPress={() => this.handleConnectButton()}
-          >
-            <Text style={styles.buttonText}>
-              {this.state.connected ? "Disconnect" : "Connect"}
+            <TouchableOpacity style={styles.startButton}>
+              <Text style={styles.startButtonText}>
+                Link with Store
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={this.buttonStyle(this.state.selectedDevice)}
-            disabled={!this.state.selectedDevice}
-            onPress={() => {
-              this.checkSupport();
-            }}
-          >
-            <Text style={styles.buttonText}>Check Support</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.startButton, { display: "none" }]}>
+              <Text style={styles.startButtonText}>
+                APN (SIM) Settings
+            </Text>
+            </TouchableOpacity>
+          </View>
+        }
+        {this.state.page == 1 &&
+          <View style={styles.main}>
+            <View style={styles.row1}>
+              <Text style={styles.deviceName}>No Device!</Text>
+              <Image source={require("./box.png")} style={styles.smallBox} />
+            </View>
+            <View style={styles.row2}>
+              <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 20 }}>
+                <Image source={require("./smalloval.png")} style={styles.smalloval} />
+                <Text style={styles.connected}>connected</Text>
+              </View>
+              <View style={{ flexDirection: "row", alignItems: "center", marginRight: 15 }}>
+                <Image source={require("./wifi.png")} style={styles.wifi} />
+                <Text style={styles.ssid}>Nana Direct</Text>
+              </View>
+            </View>
+            <View style={styles.row3}>
+              <Image source={require("./barcode.png")} style={styles.barcode} />
+              <Text style={styles.barcodeDevice}>Symbol Technologies, Inc, 2008</Text>
+            </View>
+            <TouchableOpacity>
+              <Image source={require("./refresh.png")} style={styles.refresh} />
+            </TouchableOpacity>
+            <ScrollView>
+              <TouchableOpacity style={styles.listItem} onPress={() => this.setState({ page: 2 })}>
+                <Text style={styles.listItemText}>Symbol Technologies, Inc, 2008</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.listItem}>
+                <Text style={styles.listItemText}>Symbol Technologies, Inc, 2008</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.listItem}>
+                <Text style={styles.listItemText}>Symbol Technologies, Inc, 2008</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.listItem}>
+                <Text style={styles.listItemText}>Symbol Technologies, Inc, 2008</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.listItem}>
+                <Text style={styles.listItemText}>Symbol Technologies, Inc, 2008</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.listItem}>
+                <Text style={styles.listItemText}>QQQ Technologies, Inc, 2008</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.listItem}>
+                <Text style={styles.listItemText}>RRR Technologies, Inc, 2008</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.listItem}>
+                <Text style={styles.listItemText}>SSS Technologies, Inc, 2008</Text>
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
+        }
+        {this.state.page == 2 &&
+          <View style={styles.main}>
+            <View style={styles.row1}>
+              <Text style={styles.deviceName}>No Device!</Text>
+              <Image source={require("./box.png")} style={styles.smallBox} />
+            </View>
+            <View style={styles.row2}>
+              <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 20 }}>
+                <Image source={require("./smalloval.png")} style={styles.smalloval} />
+                <Text style={styles.connected}>connected</Text>
+              </View>
+              <View style={{ flexDirection: "row", alignItems: "center", marginRight: 15 }}>
+                <Image source={require("./wifi.png")} style={styles.wifi} />
+                <Text style={styles.ssid}>Nana Direct</Text>
+              </View>
+            </View>
+            <View style={styles.row3}>
+              <Image source={require("./barcode.png")} style={styles.barcode} />
+              <Text style={styles.barcodeDevice}>Symbol Technologies, Inc, 2008</Text>
+            </View>
+            <View style={styles.network}>
+              <Text style={styles.networkTitle}>Nana Direct</Text>
+              <TextInput placeholder={"Password"} style={styles.password} />
+              <View style={styles.networkButtons}>
+                <TouchableOpacity style={styles.networkConnect}>
+                  <Text style={styles.networkButtonTitle}>Connect</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.networkSave}>
+                  <Text style={styles.networkButtonTitle}>Save</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        }
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  full: {
-    flex: 1
-  },
-  body: {
-    flex: 1
-  },
-  container: {
+  view: {
     flex: 1,
-    marginTop: 20,
-    marginLeft: 16,
-    marginRight: 16
+    justifyContent: "space-between",
+    flexDirection: "column",
+    alignItems: "center",
+    backgroundColor: "white",
   },
-  header: {
-    display: "flex",
-    justifyContent: "center"
-    //alignItems: "center"
+  startButtons: {
+    width: 370 - 22,
+    height: 400,
+    marginTop: 330,
+    marginBottom: 15,
+    justifyContent: "space-evenly"
   },
-  line: {
-    display: "flex",
-    flexDirection: "row"
+  startButton: {
+    width: "100%",
+    backgroundColor: "#66C200",
+    borderColor: "#66C200",
+    borderRadius: 8,
+    height: 60,
+    justifyContent: "center",
+    alignItems: "flex-start"
+
   },
-  line2: {
-    display: "flex",
+  startButtonText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginLeft: 35,
+    color: "white",
+    borderRadius: 8,
+  },
+  main: {
+    width: '90%',
+    height: 500,
+    borderRadius: 8,
+    backgroundColor: "#ffffff",
+    shadowColor: "#B6B6B6",
+    elevation: 16,
+    marginBottom: 30,
+  },
+  row1: {
     flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  row2: {
+    flexDirection: "row",
+    alignItems: "center",
     justifyContent: "space-between"
   },
-  title: {
-    width: 100
-  },
-  value: {
-    marginLeft: 20
-  },
-  output: {
+  deviceName: {
+    fontSize: 30,
+    marginLeft: 20,
     marginTop: 10,
-    height: 300,
-    padding: 10,
-    backgroundColor: "#FFFFFF",
-    borderWidth: 1
   },
-  inputContainer: {
-    marginTop: 10,
-    borderBottomWidth: 2
+  smallBox: {
+    width: 65,
+    height: 57,
+    marginRight: 15,
+    marginTop: 10
   },
-  textInput: {
-    paddingLeft: 10,
-    paddingRight: 10,
-    height: 40
-  },
-  button: {
-    marginTop: 16,
-    marginBottom: 16,
-    paddingLeft: 15,
-    paddingRight: 15,
+  smalloval: {
+    width: 40,
     height: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#147efb",
-    borderRadius: 3
+    borderColor: "black",
   },
-  buttonText: {
-    color: "#FFFFFF"
+  connected: {
+    fontSize: 15,
+    marginLeft: -3
+  },
+  ssid: {
+    fontSize: 15,
+  },
+  wifi: {
+    width: 28,
+    height: 28,
+    marginBottom: 7
+  },
+  row3: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 5
+  },
+  barcode: {
+    width: 22,
+    height: 22,
+    marginLeft: 20,
+    marginRight: 10
+  },
+  refresh: {
+    width: 22,
+    height: 22,
+    marginLeft: 20,
+    marginRight: 10,
+    alignSelf: "flex-end",
+    marginBottom: 10
+  },
+  barcodeDevice: {
+    fontSize: 12
+  },
+  row4: {
+    borderWidth: 1,
+    width: '90%',
+    height: 220,
+    alignSelf: "center",
+    borderRadius: 8,
+    justifyContent: "flex-start",
+    borderColor: '#BEBEBE'
+  },
+  listItem: {
+    borderBottomWidth: 0.5,
+    padding: 15
+  },
+  listItemText: {
+    fontSize: 17,
+    color: '#818181',
+    marginLeft: 10,
+  },
+
+  network: {
+    borderWidth: 1,
+    width: '90%',
+    borderColor: '#818181',
+    height: '60%',
+    alignSelf: "center",
+    marginTop: 15,
+    borderWidth: 0.5,
+    borderRadius: 8,
+    padding: 30
+  },
+  networkTitle: {
+    fontSize: 22,
+    color: '#818181',
+  },
+  password: {
+    borderWidth: 0.3,
+    width: '100%',
+    padding: 10,
+    borderColor: "#818181",
+    borderRadius: 8,
+    marginTop: 20,
+    fontSize: 18
+  },
+  networkButtons: {
+    flexDirection: "row",
+    marginTop: 20,
+    width: '100%',
+    justifyContent: "space-between"
+  },
+  networkButtonTitle: {
+    color: "white",
+    fontSize: 19,
+    fontWeight: "bold"
+  },
+  networkConnect: {
+    width: '40%',
+    height: "60%",
+    borderRadius: 8,
+    backgroundColor: "#66C200",
+    borderColor: "#66C200",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  networkSave: {
+    width: '40%',
+    height: "60%",
+    borderRadius: 8,
+    backgroundColor: "#C5C5C5",
+    borderColor: "#C5C5C5",
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
 
