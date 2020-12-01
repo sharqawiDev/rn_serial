@@ -13,8 +13,10 @@ import {
   Image,
   DeviceEventEmitter,
 } from "react-native";
-import { Picker } from "@react-native-community/picker"
 import { RNSerialport, definitions, actions } from "react-native-serialport";
+import TcpSocket from 'react-native-tcp-socket';
+
+
 import Header from "./header"
 class ManualConnection extends Component {
   constructor(props) {
@@ -23,8 +25,6 @@ class ManualConnection extends Component {
       servisStarted: false,
       connected: false,
       usbAttached: false,
-      output: "",
-      outputArray: [],
       baudRate: "9600",
       interface: "-1",
       selectedDevice: null,
@@ -34,11 +34,35 @@ class ManualConnection extends Component {
       networkPassword: "",
       availableNetworks: [],
       rotation: 0,
+      hostname: "No Device",
+      mac_address: "",
+      currentNetwork: "------",
+      vendor: "------",
+      wifiState: "disconnected",
+      searching: false,
       returnedDataType: definitions.RETURNED_DATA_TYPES.HEXSTRING
     };
 
     this.startUsbListener = this.startUsbListener.bind(this);
     this.stopUsbListener = this.stopUsbListener.bind(this);
+
+    this.client = TcpSocket.createConnection({ port: 3000, host: "192.168.242.2" }, () => {
+      // Write on the socket
+      this.client.setEncoding("ascii")
+    });
+
+    this.client.on('error', function (error) {
+      console.log(error);
+    });
+
+    this.client.on('close', function () {
+      console.log('Connection closed!');
+    });
+
+    this.client.on('data', (data) => {
+      let data2 = data.split("\n")
+      data2.map(msg => this.readFrom(msg))
+    });
   }
 
   backAction = () => {
@@ -48,19 +72,18 @@ class ManualConnection extends Component {
   };
 
   componentDidMount() {
-
-    this.startUsbListener();
+    this.client.write("{<wifi::init>}")
+    // this.startUsbListener();
   }
+
 
 
   componentWillUnmount() {
-
-    this.stopUsbListener();
+    // this.stopUsbListener();
   }
 
+
   startUsbListener() {
-
-
     DeviceEventEmitter.addListener("hardwareBackPress", this.backAction, this)
 
     DeviceEventEmitter.addListener(
@@ -122,7 +145,7 @@ class ManualConnection extends Component {
   }
   onDeviceAttached() {
     this.setState({ usbAttached: true });
-    this.fillDeviceList();
+    this.fillDeviceList().then(() => this.handleConnection())
   }
   onDeviceDetached() {
     this.setState({ usbAttached: false });
@@ -133,6 +156,7 @@ class ManualConnection extends Component {
   }
   onConnected() {
     this.setState({ connected: true });
+    RNSerialport.writeString("{<wifi::init>}")
   }
   onDisconnected() {
     this.setState({ connected: false });
@@ -142,13 +166,11 @@ class ManualConnection extends Component {
       this.state.returnedDataType === definitions.RETURNED_DATA_TYPES.INTARRAY
     ) {
       const payload = RNSerialport.intArrayToUtf16(data.payload);
-      this.setState({ output: this.state.output + payload });
     } else if (
       this.state.returnedDataType === definitions.RETURNED_DATA_TYPES.HEXSTRING
     ) {
       const payload = RNSerialport.hexToUtf16(data.payload);
-      if (payload.includes("{<wifis")) Alert.alert(payload)
-      this.setState({ output: this.state.output + payload });
+      this.readFrom(payload)
     }
   }
 
@@ -175,29 +197,6 @@ class ManualConnection extends Component {
     }
   };
 
-  devicePickerItems() {
-    return this.state.deviceList.map((device, index) =>
-      !device.placeholder ? (
-        <Picker.Item key={index} label={device.name} value={device} />
-      ) : (
-          <Picker.Item key={index} label={device.name} value={null} />
-        )
-    );
-  }
-
-  handleSendButton(msg) {
-    if (msg == "list") {
-      RNSerialport.writeString("{<wifi::list>}");
-    }
-    else if (msg == "connect") {
-      RNSerialport.writeString(`{<wifi::${this.state.selectedNetwork}||${this.state.networkPassword}>}`);
-    }
-  }
-
-  handleClearButton() {
-    this.setState({ availableNetworks: [] });
-  }
-
   postData = async () => {
     console.log('Requesting config data from Nana Server...');
     const json = await fetch('http://iot.nana.sa/', {
@@ -206,37 +205,22 @@ class ManualConnection extends Component {
         'Content-Type': 'application/json;charset=utf-8'
       },
       body: JSON.stringify({
-        mac_address: "AA:AA:AA:AA:AA:AA",
-        serial_number: "NAble1",
+        mac_address: this.state.mac_address,
+        serial_number: this.state.hostname,
         is_all: true
       })
     });
     const data = json.json();
-    return data["result"]["device"];
+    return data
   } // postData.then(data => ....)
 
-  checkSupport() {
-    if (
-      this.state.selectedDevice.name === undefined ||
-      this.state.selectedDevice === null
-    )
-      return;
-    RNSerialport.isSupported(this.state.selectedDevice.name)
-      .then(status => {
-        alert(status ? "Supported" : "Not Supported");
-      })
-      .catch(error => {
-        alert(JSON.stringify(error));
-      });
-  }
-
-  handleConnectButton = async () => {
+  handleConnection = async () => {
     const isOpen = await RNSerialport.isOpen();
     if (isOpen) {
       RNSerialport.disconnect();
     } else {
       if (!this.state.selectedDevice) {
-        alert("Please choose device");
+        alert("No device selected!");
         return;
       }
       RNSerialport.setInterface(parseInt(this.state.interface, 10));
@@ -254,14 +238,51 @@ class ManualConnection extends Component {
   };
 
   readFrom = (message) => {
+    console.log(message)
     const x = message.indexOf("::");
-    if (x > 0) // && message.startsWith("{<") && message.endsWith(">}"))
-    {
+    if (x > 0) {
+      const end = message.indexOf(">}");
       const key = message.substring(2, x);
-      const value = message.substring(x + 2, message.length - 3);
-      return { key, value }
+      const value = message.substring(x + 2, end);
+      const i = value.indexOf("||");
+      if (i > 0) {
+        const subKey = value.substring(0, i);
+        const subVal = value.substring(i + 2);
+        this.setState({ wifiState: subKey, currentNetwork: subVal })
+      }
+      if (key == "hostname") {
+        this.setState({ hostname: value })
+      } else if (key == "mac") {
+        this.setState({ mac_address: value })
+      }
+      else if (key == "ssid") {
+        this.setState({ currentNetwork: value, wifiState: value !== "" ? "connected" : "disconnected" })
+      } else if (key == "vendor") {
+        this.setState({ vendor: value })
+      } else if (key == "config") {
+        Alert.alert("config saved successfully!");
+      } else if (key == "wifi" && value == "saved||" + this.state.selectedNetwork) {
+        Alert.alert("Network saved successfully!");
+        this.sendData("{<wifi::init>}")
+      } else if (key == "wifis") {
+        if (value == "clear") {
+          this.setState({ availableNetworks: [] })
+        } else if (value == "none") {
+          // do nothing
+        } else if (value == "done") {
+          this.setState({ searching: false })
+        }
+        else {
+          console.log(key, message)
+          this.setState({ availableNetworks: [...this.state.availableNetworks, value] })
+        }
+      }
     }
-    return {}
+  }
+
+  sendData = data => {
+    // RNSerialport.writeString(data);
+    this.client.write(data);
   }
 
   render() {
@@ -301,17 +322,34 @@ class ManualConnection extends Component {
       outputRange: ['0deg', '360deg']
     })
 
+    const connectCondition = this.state.wifiState === "connecting" && (this.state.currentNetwork === this.state.selectedNetwork);
+    const saveCondition = this.state.wifiState === "connected" && (this.state.currentNetwork === this.state.selectedNetwork);
+
     return (
       <View style={styles.view}>
         <Header />
         {this.state.page == 0 &&
           <View style={styles.startButtons}>
-            <TouchableOpacity style={styles.startButton} onPress={() => this.setState({ page: 1 })}>
+            <TouchableOpacity style={styles.startButton} onPress={() => {
+              this.setState({ page: 1 })
+            }}>
               <Text style={styles.startButtonText}>
                 WiFi Settings
             </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.startButton}>
+            <TouchableOpacity style={styles.startButton} onPress={() => {
+              this.postData().then(data => {
+                data = data["result"]["device"]
+                let wifi_name, wifi_password, store_id, update_rate;
+                wifi_name = data["wifi_name"] ? `"wifi_name":"${data["wifi_name"]}",` : "";
+                wifi_password = data["wifi_password"] ? `"wifi_password":"${data["wifi_password"]}",` : "";
+                store_id = data["store_id"] ? `"store_id":"${data["store_id"]}",` : "";
+                update_rate = data["update_rate"] ? `"update_rate":"${data["update_rate"]}",` : "";
+                const config = `{<config::{${store_id}${update_rate}${wifi_name}${wifi_password}}>}`;
+                this.sendData(config)
+              })
+            }
+            }>
               <Text style={styles.startButtonText}>
                 Link with Store
             </Text>
@@ -326,82 +364,115 @@ class ManualConnection extends Component {
         {this.state.page == 1 &&
           <View style={styles.main}>
             <View style={styles.row1}>
-              <Text style={styles.deviceName}>No Device!</Text>
+              <Text style={styles.deviceName}>{this.state.hostname}</Text>
               <Image source={require("./box.png")} style={styles.smallBox} />
             </View>
             <View style={styles.row2}>
               <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 20 }}>
-                <Image source={require("./smalloval.png")} style={styles.smalloval} />
-                <Text style={styles.connected}>connected</Text>
+                {this.state.currentNetwork !== "------" ?
+                  <Image source={require("./ovalConnected.png")} style={styles.smalloval} /> :
+                  <Image source={require("./ovalDisconnected.png")} style={styles.smalloval} />
+                }
+
+                <Text style={styles.connected}>{this.state.wifiState}</Text>
               </View>
               <View style={{ flexDirection: "row", alignItems: "center", marginRight: 15 }}>
                 <Image source={require("./wifi.png")} style={styles.wifi} />
-                <Text style={styles.ssid}>Nana Direct</Text>
+                <Text style={styles.ssid}>{this.state.currentNetwork}</Text>
               </View>
             </View>
             <View style={styles.row3}>
               <Image source={require("./barcode.png")} style={styles.barcode} />
-              <Text style={styles.barcodeDevice}>Symbol Technologies, Inc, 2008</Text>
+              <Text style={styles.barcodeDevice}>{this.state.vendor}</Text>
             </View>
-            <TouchableOpacity>
-              <Image source={require("./refresh.png")} style={styles.refresh} />
-            </TouchableOpacity>
+            {this.state.searching ?
+              <TouchableOpacity style={{ width: 30, alignSelf: "flex-end" }} disabled>
+                <Image source={require("./searching.gif")} style={styles.refresh} />
+              </TouchableOpacity>
+              :
+              <TouchableOpacity style={{ width: 30, alignSelf: "flex-end" }} onPress={() => {
+                this.sendData("{<wifi::list>}\n")
+                this.setState({ searching: true })
+              }}>
+                <Image source={require("./refresh.png")} style={styles.refresh} />
+              </TouchableOpacity>
+            }
             <ScrollView>
-              <TouchableOpacity style={styles.listItem} onPress={() => this.setState({ page: 2 })}>
-                <Text style={styles.listItemText}>Symbol Technologies, Inc, 2008</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.listItem}>
-                <Text style={styles.listItemText}>Symbol Technologies, Inc, 2008</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.listItem}>
-                <Text style={styles.listItemText}>Symbol Technologies, Inc, 2008</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.listItem}>
-                <Text style={styles.listItemText}>Symbol Technologies, Inc, 2008</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.listItem}>
-                <Text style={styles.listItemText}>Symbol Technologies, Inc, 2008</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.listItem}>
-                <Text style={styles.listItemText}>QQQ Technologies, Inc, 2008</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.listItem}>
-                <Text style={styles.listItemText}>RRR Technologies, Inc, 2008</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.listItem}>
-                <Text style={styles.listItemText}>SSS Technologies, Inc, 2008</Text>
-              </TouchableOpacity>
+              {
+                this.state.availableNetworks.length > 0 && this.state.availableNetworks.map(network => (
+                  <TouchableOpacity style={styles.listItem} onPress={() => this.setState({ page: 2, selectedNetwork: network })} key={network}>
+                    <Text style={styles.listItemText}>{network}</Text>
+                  </TouchableOpacity>
+                ))
+              }
+              {this.state.availableNetworks.length == 0 && (
+                <TouchableOpacity style={styles.listItem} disabled>
+                  <Text style={styles.listItemText}>No Networks Found!</Text>
+                </TouchableOpacity>
+              )}
             </ScrollView>
           </View>
         }
         {this.state.page == 2 &&
           <View style={styles.main}>
             <View style={styles.row1}>
-              <Text style={styles.deviceName}>No Device!</Text>
+              <Text style={styles.deviceName}>{this.state.hostname}</Text>
               <Image source={require("./box.png")} style={styles.smallBox} />
             </View>
             <View style={styles.row2}>
               <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 20 }}>
-                <Image source={require("./smalloval.png")} style={styles.smalloval} />
-                <Text style={styles.connected}>connected</Text>
+                {this.state.wifiState == "connected" &&
+                  <Image source={require("./ovalConnected.png")} style={styles.smalloval} />
+                }
+                {this.state.wifiState == "connecting" &&
+                  <Image source={require("./ovalConnecting.png")} style={styles.smalloval} />
+                }
+                {this.state.wifiState == "failed" &&
+                  <Image source={require("./ovalfailed.png")} style={styles.smalloval} />
+                }
+                <Text style={styles.connected}>{this.state.wifiState}</Text>
               </View>
               <View style={{ flexDirection: "row", alignItems: "center", marginRight: 15 }}>
                 <Image source={require("./wifi.png")} style={styles.wifi} />
-                <Text style={styles.ssid}>Nana Direct</Text>
+                <Text style={styles.ssid}>{this.state.currentNetwork}</Text>
               </View>
             </View>
             <View style={styles.row3}>
               <Image source={require("./barcode.png")} style={styles.barcode} />
-              <Text style={styles.barcodeDevice}>Symbol Technologies, Inc, 2008</Text>
+              <Text style={styles.barcodeDevice}>{this.state.vendor}</Text>
             </View>
             <View style={styles.network}>
-              <Text style={styles.networkTitle}>Nana Direct</Text>
-              <TextInput placeholder={"Password"} style={styles.password} />
+              <Text style={styles.networkTitle}>{this.state.selectedNetwork}</Text>
+              <TextInput placeholder={"Password"} style={styles.password}
+                placeholder={"Enter a password"}
+                onChangeText={(text) => {
+                  this.setState({ networkPassword: text })
+                }} />
               <View style={styles.networkButtons}>
-                <TouchableOpacity style={styles.networkConnect}>
+                <TouchableOpacity
+                  disabled={connectCondition}
+                  style={[styles.networkConnect, {
+                    backgroundColor: connectCondition ? '#C5C5C5' : "#66C200",
+                    borderColor: connectCondition ? '#C5C5C5' : "#66C200"
+                  }]} onPress={() => {
+                    if (this.state.networkPassword.length < 8) {
+                      Alert.alert("Password is invalid!");
+
+                    } else {
+                      this.setState({ wifiState: 'connecting', currentNetwork: this.state.selectedNetwork })
+                      this.sendData("{<wifi::" + this.state.selectedNetwork + "||" + this.state.networkPassword + ">}\n")
+                    }
+                  }}>
                   <Text style={styles.networkButtonTitle}>Connect</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.networkSave}>
+                <TouchableOpacity style={[styles.networkSave, {
+                  backgroundColor: saveCondition ? "#66C200" : '#C5C5C5',
+                  borderColor: saveCondition ? "#66C200" : '#C5C5C5'
+                }]} disabled={!saveCondition}
+                  onPress={() => {
+                    this.sendData("{<wifi::save>}")
+                  }}
+                >
                   <Text style={styles.networkButtonTitle}>Save</Text>
                 </TouchableOpacity>
               </View>
@@ -584,7 +655,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#C5C5C5",
     borderColor: "#C5C5C5",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   }
 });
 
