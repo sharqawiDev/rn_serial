@@ -14,10 +14,9 @@ import {
   DeviceEventEmitter,
 } from "react-native";
 import { RNSerialport, definitions, actions } from "react-native-serialport";
-import TcpSocket from 'react-native-tcp-socket';
+// import TcpSocket from 'react-native-tcp-socket';
 
-
-import Header from "./header"
+import Header from "../header"
 class ManualConnection extends Component {
   constructor(props) {
     super(props);
@@ -37,6 +36,7 @@ class ManualConnection extends Component {
       hostname: "No Device",
       mac_address: "",
       currentNetwork: "------",
+      gettingConfig: false,
       vendor: "------",
       wifiState: "disconnected",
       searching: false,
@@ -46,23 +46,23 @@ class ManualConnection extends Component {
     this.startUsbListener = this.startUsbListener.bind(this);
     this.stopUsbListener = this.stopUsbListener.bind(this);
 
-    this.client = TcpSocket.createConnection({ port: 3000, host: "192.168.242.2" }, () => {
-      // Write on the socket
-      this.client.setEncoding("ascii")
-    });
+    // this.client = TcpSocket.createConnection({ port: 3000, host: "192.168.242.2" }, () => {
+    //   // Write on the socket
+    //   this.client.setEncoding("ascii")
+    // });
 
-    this.client.on('error', function (error) {
-      console.log(error);
-    });
+    // this.client.on('error', function (error) {
+    //   console.log(error);
+    // });
 
-    this.client.on('close', function () {
-      console.log('Connection closed!');
-    });
+    // this.client.on('close', function () {
+    //   console.log('Connection closed!');
+    // });
 
-    this.client.on('data', (data) => {
-      let data2 = data.split("\n")
-      data2.map(msg => this.readFrom(msg))
-    });
+    // this.client.on('data', (data) => {
+    //   let data2 = data.split("\n")
+    //   data2.map(msg => this.readFrom(msg))
+    // });
   }
 
   backAction = () => {
@@ -72,14 +72,12 @@ class ManualConnection extends Component {
   };
 
   componentDidMount() {
-    this.client.write("{<wifi::init>}")
-    // this.startUsbListener();
+    this.startUsbListener();
+
   }
 
-
-
   componentWillUnmount() {
-    // this.stopUsbListener();
+    this.stopUsbListener();
   }
 
 
@@ -145,7 +143,7 @@ class ManualConnection extends Component {
   }
   onDeviceAttached() {
     this.setState({ usbAttached: true });
-    this.fillDeviceList().then(() => this.handleConnection())
+    this.fillDeviceList()
   }
   onDeviceDetached() {
     this.setState({ usbAttached: false });
@@ -155,8 +153,9 @@ class ManualConnection extends Component {
     });
   }
   onConnected() {
-    this.setState({ connected: true });
-    RNSerialport.writeString("{<wifi::init>}")
+    this.setState({ connected: true }, () => {
+      Alert.alert("connected!")
+    });
   }
   onDisconnected() {
     this.setState({ connected: false });
@@ -166,11 +165,12 @@ class ManualConnection extends Component {
       this.state.returnedDataType === definitions.RETURNED_DATA_TYPES.INTARRAY
     ) {
       const payload = RNSerialport.intArrayToUtf16(data.payload);
+      payload.split("\n").map(msg => this.readFrom(msg))
     } else if (
       this.state.returnedDataType === definitions.RETURNED_DATA_TYPES.HEXSTRING
     ) {
       const payload = RNSerialport.hexToUtf16(data.payload);
-      this.readFrom(payload)
+      payload.split("\n").map(msg => this.readFrom(msg))
     }
   }
 
@@ -210,9 +210,9 @@ class ManualConnection extends Component {
         is_all: true
       })
     });
-    const data = json.json();
+    let data = await json.json();
     return data
-  } // postData.then(data => ....)
+  }
 
   handleConnection = async () => {
     const isOpen = await RNSerialport.isOpen();
@@ -220,7 +220,7 @@ class ManualConnection extends Component {
       RNSerialport.disconnect();
     } else {
       if (!this.state.selectedDevice) {
-        alert("No device selected!");
+        alert("No device attached!");
         return;
       }
       RNSerialport.setInterface(parseInt(this.state.interface, 10));
@@ -229,12 +229,6 @@ class ManualConnection extends Component {
         parseInt(this.state.baudRate, 10)
       );
     }
-  };
-
-  buttonStyle = status => {
-    return status
-      ? styles.button
-      : Object.assign({}, styles.button, { backgroundColor: "#C0C0C0" });
   };
 
   readFrom = (message) => {
@@ -260,6 +254,7 @@ class ManualConnection extends Component {
       } else if (key == "vendor") {
         this.setState({ vendor: value })
       } else if (key == "config") {
+        this.setState({ gettingConfig: false })
         Alert.alert("config saved successfully!");
       } else if (key == "wifi" && value == "saved||" + this.state.selectedNetwork) {
         Alert.alert("Network saved successfully!");
@@ -280,9 +275,23 @@ class ManualConnection extends Component {
     }
   }
 
+  handleConfig = () => {
+    this.setState({ gettingConfig: true })
+    this.postData().then(data => {
+      data = data["result"]["device"]
+      let wifi_name, wifi_password, store_id, update_rate;
+      wifi_name = data["wifi_name"] ? `"wifi_name":"${data["wifi_name"]}",` : "";
+      wifi_password = data["wifi_password"] ? `"wifi_password":"${data["wifi_password"]}",` : "";
+      store_id = data["store_id"] ? `"store_id":"${data["store_id"]}",` : "";
+      update_rate = data["update_rate"] ? `"update_rate":"${data["update_rate"]}",` : "";
+      const config = `{<config::{${store_id}${update_rate}${wifi_name}${wifi_password}}>}`;
+      this.sendData(config)
+    })
+  }
+
   sendData = data => {
-    // RNSerialport.writeString(data);
-    this.client.write(data);
+    RNSerialport.writeString(data + "\n");
+    // this.client.write(data);
   }
 
   render() {
@@ -330,71 +339,80 @@ class ManualConnection extends Component {
         <Header />
         {this.state.page == 0 &&
           <View style={styles.startButtons}>
-            <TouchableOpacity style={styles.startButton} onPress={() => {
-              this.setState({ page: 1 })
-            }}>
-              <Text style={styles.startButtonText}>
-                WiFi Settings
-            </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.startButton} onPress={() => {
-              this.postData().then(data => {
-                data = data["result"]["device"]
-                let wifi_name, wifi_password, store_id, update_rate;
-                wifi_name = data["wifi_name"] ? `"wifi_name":"${data["wifi_name"]}",` : "";
-                wifi_password = data["wifi_password"] ? `"wifi_password":"${data["wifi_password"]}",` : "";
-                store_id = data["store_id"] ? `"store_id":"${data["store_id"]}",` : "";
-                update_rate = data["update_rate"] ? `"update_rate":"${data["update_rate"]}",` : "";
-                const config = `{<config::{${store_id}${update_rate}${wifi_name}${wifi_password}}>}`;
-                this.sendData(config)
-              })
+            {
+              !this.state.connected ?
+                <TouchableOpacity style={styles.startButton} onPress={() => {
+                  this.handleConnection()
+                }}>
+                  <Text style={styles.startButtonText}>
+                    Connect to Device
+                  </Text>
+                </TouchableOpacity>
+                :
+
+                <>
+                  <TouchableOpacity style={styles.startButton} onPress={() => {
+                    this.sendData("{<wifi::init>}")
+                    this.setState({ page: 1 })
+                  }
+                  }>
+                    <Text style={styles.startButtonText}>
+                      WiFi Settings
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.startButton}
+                    disabled={this.state.gettingConfig}
+                    onPress={() =>
+                      this.handleConfig()
+                    }>
+                    <Text style={styles.startButtonText}>
+                      Link with Store
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={[styles.startButton, { display: "none" }]}>
+                    <Text style={styles.startButtonText}>
+                      APN (SIM) Settings
+                    </Text>
+                  </TouchableOpacity>
+                </>
             }
-            }>
-              <Text style={styles.startButtonText}>
-                Link with Store
-            </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.startButton, { display: "none" }]}>
-              <Text style={styles.startButtonText}>
-                APN (SIM) Settings
-            </Text>
-            </TouchableOpacity>
           </View>
         }
         {this.state.page == 1 &&
           <View style={styles.main}>
             <View style={styles.row1}>
               <Text style={styles.deviceName}>{this.state.hostname}</Text>
-              <Image source={require("./box.png")} style={styles.smallBox} />
+              <Image source={require("./img/box.png")} style={styles.smallBox} />
             </View>
             <View style={styles.row2}>
               <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 20 }}>
                 {this.state.currentNetwork !== "------" ?
-                  <Image source={require("./ovalConnected.png")} style={styles.smalloval} /> :
-                  <Image source={require("./ovalDisconnected.png")} style={styles.smalloval} />
+                  <Image source={require("./img/ovalConnected.png")} style={styles.smalloval} /> :
+                  <Image source={require("./img/ovalDisconnected.png")} style={styles.smalloval} />
                 }
 
                 <Text style={styles.connected}>{this.state.wifiState}</Text>
               </View>
               <View style={{ flexDirection: "row", alignItems: "center", marginRight: 15 }}>
-                <Image source={require("./wifi.png")} style={styles.wifi} />
+                <Image source={require("./img/wifi.png")} style={styles.wifi} />
                 <Text style={styles.ssid}>{this.state.currentNetwork}</Text>
               </View>
             </View>
             <View style={styles.row3}>
-              <Image source={require("./barcode.png")} style={styles.barcode} />
+              <Image source={require("./img/barcode.png")} style={styles.barcode} />
               <Text style={styles.barcodeDevice}>{this.state.vendor}</Text>
             </View>
             {this.state.searching ?
               <TouchableOpacity style={{ width: 30, alignSelf: "flex-end" }} disabled>
-                <Image source={require("./searching.gif")} style={styles.refresh} />
+                <Image source={require("./img/searching.gif")} style={styles.refresh} />
               </TouchableOpacity>
               :
               <TouchableOpacity style={{ width: 30, alignSelf: "flex-end" }} onPress={() => {
-                this.sendData("{<wifi::list>}\n")
+                this.sendData("{<wifi::list>}")
                 this.setState({ searching: true })
               }}>
-                <Image source={require("./refresh.png")} style={styles.refresh} />
+                <Image source={require("./img/refresh.png")} style={styles.refresh} />
               </TouchableOpacity>
             }
             <ScrollView>
@@ -417,28 +435,28 @@ class ManualConnection extends Component {
           <View style={styles.main}>
             <View style={styles.row1}>
               <Text style={styles.deviceName}>{this.state.hostname}</Text>
-              <Image source={require("./box.png")} style={styles.smallBox} />
+              <Image source={require("./img/box.png")} style={styles.smallBox} />
             </View>
             <View style={styles.row2}>
               <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 20 }}>
                 {this.state.wifiState == "connected" &&
-                  <Image source={require("./ovalConnected.png")} style={styles.smalloval} />
+                  <Image source={require("./img/ovalConnected.png")} style={styles.smalloval} />
                 }
                 {this.state.wifiState == "connecting" &&
-                  <Image source={require("./ovalConnecting.png")} style={styles.smalloval} />
+                  <Image source={require("./img/ovalConnecting.png")} style={styles.smalloval} />
                 }
                 {this.state.wifiState == "failed" &&
-                  <Image source={require("./ovalfailed.png")} style={styles.smalloval} />
+                  <Image source={require("./img/ovalfailed.png")} style={styles.smalloval} />
                 }
                 <Text style={styles.connected}>{this.state.wifiState}</Text>
               </View>
               <View style={{ flexDirection: "row", alignItems: "center", marginRight: 15 }}>
-                <Image source={require("./wifi.png")} style={styles.wifi} />
+                <Image source={require("./img/wifi.png")} style={styles.wifi} />
                 <Text style={styles.ssid}>{this.state.currentNetwork}</Text>
               </View>
             </View>
             <View style={styles.row3}>
-              <Image source={require("./barcode.png")} style={styles.barcode} />
+              <Image source={require("./img/barcode.png")} style={styles.barcode} />
               <Text style={styles.barcodeDevice}>{this.state.vendor}</Text>
             </View>
             <View style={styles.network}>
@@ -539,6 +557,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     marginLeft: 20,
     marginTop: 10,
+    fontWeight: "bold"
   },
   smallBox: {
     width: 65,
@@ -561,7 +580,7 @@ const styles = StyleSheet.create({
   wifi: {
     width: 28,
     height: 28,
-    marginBottom: 7
+    marginBottom: 7,
   },
   row3: {
     flexDirection: "row",
@@ -571,14 +590,14 @@ const styles = StyleSheet.create({
   barcode: {
     width: 22,
     height: 22,
-    marginLeft: 20,
+    marginLeft: 30,
     marginRight: 10
   },
   refresh: {
     width: 22,
     height: 22,
     marginLeft: 20,
-    marginRight: 10,
+    marginRight: 20,
     alignSelf: "flex-end",
     marginBottom: 10
   },
@@ -607,13 +626,15 @@ const styles = StyleSheet.create({
   network: {
     borderWidth: 1,
     width: '90%',
-    borderColor: '#818181',
     height: '60%',
+    borderColor: "white",
     alignSelf: "center",
     marginTop: 15,
-    borderWidth: 0.5,
     borderRadius: 8,
-    padding: 30
+    padding: 30,
+    shadowColor: "#B6B6B6",
+    backgroundColor: "white",
+    elevation: 8
   },
   networkTitle: {
     fontSize: 22,
