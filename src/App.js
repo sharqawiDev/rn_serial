@@ -5,11 +5,13 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  TouchableHighlight,
   ScrollView,
   Alert,
   Animated,
   BackHandler,
   Easing,
+  Modal,
   Image,
   DeviceEventEmitter,
 } from "react-native";
@@ -33,11 +35,13 @@ class ManualConnection extends Component {
       networkPassword: "",
       availableNetworks: [],
       rotation: 0,
-      hostname: "No Device",
+      hostname: "No Device!",
       mac_address: "",
       currentNetwork: "------",
-      gettingConfig: false,
+      configSaved: false,
+      modalVisible: false,
       vendor: "------",
+      connectionMessage: ["", "black"],
       wifiState: "disconnected",
       searching: false,
       returnedDataType: definitions.RETURNED_DATA_TYPES.HEXSTRING
@@ -142,19 +146,22 @@ class ManualConnection extends Component {
     Alert.alert("service stopped");
   }
   onDeviceAttached() {
-    this.setState({ usbAttached: true });
+    this.setState({ usbAttached: true }, () => {
+      this.setState({ connectionMessage: ["Device is Ready!", "green"] })
+    });
     this.fillDeviceList()
   }
   onDeviceDetached() {
-    this.setState({ usbAttached: false });
-    this.setState({ selectedDevice: null });
     this.setState({
-      deviceList: [{ name: "Device Not Found", placeholder: true }]
-    });
+      usbAttached: false,
+      selectedDevice: null,
+      deviceList: [{ name: "Device Not Found", placeholder: true }],
+      connectionMessage: ["", "black"]
+    })
   }
   onConnected() {
     this.setState({ connected: true }, () => {
-      Alert.alert("connected!")
+      this.sendData("{<wifi::init>}")
     });
   }
   onDisconnected() {
@@ -220,7 +227,9 @@ class ManualConnection extends Component {
       RNSerialport.disconnect();
     } else {
       if (!this.state.selectedDevice) {
-        alert("No device attached!");
+        this.setState({ connectionMessage: ["No Device Attached!", "red"] }, () => {
+          setTimeout(() => this.setState({ connectionMessage: ["", "black"] }), 3000)
+        })
         return;
       }
       RNSerialport.setInterface(parseInt(this.state.interface, 10));
@@ -254,8 +263,7 @@ class ManualConnection extends Component {
       } else if (key == "vendor") {
         this.setState({ vendor: value })
       } else if (key == "config") {
-        this.setState({ gettingConfig: false })
-        Alert.alert("config saved successfully!");
+        this.setState({ configSaved: true })
       } else if (key == "wifi" && value == "saved||" + this.state.selectedNetwork) {
         Alert.alert("Network saved successfully!");
         this.sendData("{<wifi::init>}")
@@ -276,17 +284,18 @@ class ManualConnection extends Component {
   }
 
   handleConfig = () => {
-    this.setState({ gettingConfig: true })
     this.postData().then(data => {
-      data = data["result"]["device"]
-      let wifi_name, wifi_password, store_id, update_rate;
-      wifi_name = data["wifi_name"] ? `"wifi_name":"${data["wifi_name"]}",` : "";
-      wifi_password = data["wifi_password"] ? `"wifi_password":"${data["wifi_password"]}",` : "";
-      store_id = data["store_id"] ? `"store_id":"${data["store_id"]}",` : "";
-      update_rate = data["update_rate"] ? `"update_rate":"${data["update_rate"]}",` : "";
-      const config = `{<config::{${store_id}${update_rate}${wifi_name}${wifi_password}}>}`;
-      this.sendData(config)
-    })
+      if (data["result"][0] != false) {
+        data = data["result"]["device"]
+        let wifi_name, wifi_password, store_id, update_rate;
+        wifi_name = data["wifi_name"] ? `"wifi_name":"${data["wifi_name"]}",` : "";
+        wifi_password = data["wifi_password"] ? `"wifi_password":"${data["wifi_password"]}",` : "";
+        store_id = data["store_id"] ? `"store_id":"${data["store_id"]}",` : "";
+        update_rate = data["update_rate"] ? `"update_rate":"${data["update_rate"]}",` : "";
+        const config = `{<config::{${store_id}${update_rate}${wifi_name}${wifi_password}}>}`;
+        this.sendData(config)
+      }
+    }).catch(err => Alert.alert("err" + err))
   }
 
   sendData = data => {
@@ -341,18 +350,20 @@ class ManualConnection extends Component {
           <View style={styles.startButtons}>
             {
               !this.state.connected ?
-                <TouchableOpacity style={styles.startButton} onPress={() => {
-                  this.handleConnection()
-                }}>
-                  <Text style={styles.startButtonText}>
-                    Connect to Device
+                <>
+                  <TouchableOpacity style={[styles.startButton, styles.roundedButton]} onPress={() => {
+                    this.handleConnection()
+                  }}>
+                    <Text style={[styles.startButtonText, { marginLeft: 0, alignSelf: "center", fontSize: 22 }]}>
+                      Connect
                   </Text>
-                </TouchableOpacity>
+                  </TouchableOpacity>
+                  <Text style={[styles.connectionMsg, { color: this.state.connectionMessage[1] }]}>{this.state.connectionMessage[0]}</Text>
+                </>
                 :
 
                 <>
                   <TouchableOpacity style={styles.startButton} onPress={() => {
-                    this.sendData("{<wifi::init>}")
                     this.setState({ page: 1 })
                   }
                   }>
@@ -362,9 +373,9 @@ class ManualConnection extends Component {
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.startButton}
-                    disabled={this.state.gettingConfig}
+                    disabled={this.state.mac_address == ""}
                     onPress={() =>
-                      this.handleConfig()
+                      this.setState({ configSaved: false, modalVisible: !this.state.modalVisible }, () => this.handleConfig())
                     }>
                     <Text style={styles.startButtonText}>
                       Link with Store
@@ -375,6 +386,57 @@ class ManualConnection extends Component {
                       APN (SIM) Settings
                     </Text>
                   </TouchableOpacity>
+
+                  <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={this.state.modalVisible}
+                  >
+                    <View style={styles.centeredView}>
+                      <View style={styles.modalView}>
+                        <View style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          paddingHorizontal: 10,
+                          borderTopLeftRadius: 8,
+                          borderTopRightRadius: 8,
+                          alignItems: "center",
+                          backgroundColor: "#67B117",
+                          height: 40,
+                        }}>
+                          <Text style={{ color: "white", fontWeight: "bold", fontSize: 17 }}>Link with Store</Text>
+                          <TouchableOpacity
+                            onPress={() => {
+                              this.setState({ modalVisible: !this.state.modalVisible })
+                            }}
+                          >
+                            <Text style={{
+                              fontSize: 23,
+                              color: "white"
+                            }}>×</Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View style={{
+                          justifyContent: "center",
+                          alignItems: "center"
+                        }}>
+                          {
+                            this.state.configSaved ?
+                              <>
+                                <Image source={require("./img/done.gif")} style={{ width: 80, height: 80, marginTop: 25 }} />
+                                <Text style={{ marginTop: 5, fontWeight: "bold", fontSize: 15 }}>Config Saved Successfully!</Text>
+                              </>
+                              :
+                              <>
+                                <Image source={require("./img/searching.gif")} style={{ width: 80, height: 80, marginTop: 25 }} />
+                                <Text style={{ marginTop: 5, fontWeight: "bold", fontSize: 15 }}>Loading...</Text>
+                              </>
+                          }
+
+                        </View>
+                      </View>
+                    </View>
+                  </Modal>
                 </>
             }
           </View>
@@ -517,6 +579,21 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     justifyContent: "space-evenly"
   },
+  roundedButton: {
+    borderRadius: 300,
+    height: 150,
+    width: 150,
+    alignSelf: "center",
+    shadowColor: "#B6B6B6",
+    elevation: 16,
+  },
+  connectionMsg: {
+    alignSelf: "center",
+    fontSize: 20,
+    position: "absolute",
+    bottom: 30,
+    display: "none",
+  },
   startButton: {
     width: "100%",
     backgroundColor: "#66C200",
@@ -533,6 +610,27 @@ const styles = StyleSheet.create({
     marginLeft: 35,
     color: "white",
     borderRadius: 8,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 8,
+    width: 300,
+    height: 250,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
   },
   main: {
     width: '90%',
