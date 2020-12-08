@@ -5,7 +5,6 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  TouchableHighlight,
   ScrollView,
   Alert,
   Animated,
@@ -17,6 +16,8 @@ import {
 } from "react-native";
 import { RNSerialport, definitions, actions } from "react-native-serialport";
 // import TcpSocket from 'react-native-tcp-socket';
+
+// import axios from "axios"
 
 import Header from "../header"
 class ManualConnection extends Component {
@@ -204,22 +205,71 @@ class ManualConnection extends Component {
     }
   };
 
-  postData = async () => {
-    console.log('Requesting config data from Nana Server...');
-    const json = await fetch('http://iot.nana.sa/', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      },
-      body: JSON.stringify({
-        mac_address: this.state.mac_address,
-        serial_number: this.state.hostname,
-        is_all: true
+  handleConfig = async () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    // myHeaders.append("Cookie", "user_image=; user_id=Guest; system_user=yes; full_name=Guest%20Guest; sid=Guest; GCLB=CKuesJ-T5ZHibQ");
+
+    var raw = JSON.stringify({ "mac_address": this.state.mac_address, "serial_number": this.state.hostname, "is_all": true });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+    fetch("https://nana.sa/api/update_last_scan_from_scanner", requestOptions)
+      .then(response => response.text())
+      .then(data => {
+        data = JSON.parse(data)
+        if (data["result"][0] != false) {
+          data = data["result"]["device"]
+          let wifi_name, wifi_password, store_id, update_rate;
+          wifi_name = data["wifi_name"] ? `"wifi_name":"${data["wifi_name"]}",` : "";
+          wifi_password = data["wifi_password"] ? `"wifi_password":"${data["wifi_password"]}",` : "";
+          store_id = data["store_id"] ? `"store_id":"${data["store_id"]}",` : "";
+          update_rate = data["update_rate"] ? `"update_rate":"${data["update_rate"]}",` : "";
+          const config = `{<config::{${store_id}${update_rate}${wifi_name}${wifi_password}}>}`;
+          this.sendData(config)
+          // console.log(config)
+        }
       })
-    });
-    let data = await json.json();
-    return data
+      .catch(error => {
+        Alert.alert("Connection Error")
+        console.log('error', error)
+      });
   }
+
+  // handleConfig = () => {
+  //   axios.post('https://nana.sa/api/update_last_scan_from_scanner',
+  //     JSON.stringify({
+  //       mac_address: this.state.mac_address,
+  //       serial_number: this.state.hostname,
+  //       is_all: true
+  //     })
+  //     , {
+  //       headers: {
+  //         'Content-Type': 'application/json'
+  //       }
+  //     })
+  //     .then(function (response) {
+  //       let data = JSON.parse(JSON.stringify(response.data))
+  //       if (data["result"][0] != false) {
+  //         data = data["result"]["device"]
+  //         let wifi_name, wifi_password, store_id, update_rate;
+  //         wifi_name = data["wifi_name"] ? `"wifi_name":"${data["wifi_name"]}",` : "";
+  //         wifi_password = data["wifi_password"] ? `"wifi_password":"${data["wifi_password"]}",` : "";
+  //         store_id = data["store_id"] ? `"store_id":"${data["store_id"]}",` : "";
+  //         update_rate = data["update_rate"] ? `"update_rate":"${data["update_rate"]}",` : "";
+  //         const config = `{<config::{${store_id}${update_rate}${wifi_name}${wifi_password}}>}`;
+  //         this.sendData(config)
+  //         // console.log(config)
+  //       }
+  //     })
+  //     .catch(function (error) {
+  //       Alert.alert(error)
+  //     });
+  // }
 
   handleConnection = async () => {
     const isOpen = await RNSerialport.isOpen();
@@ -238,7 +288,7 @@ class ManualConnection extends Component {
         parseInt(this.state.baudRate, 10)
       );
     }
-  };
+  }
 
   readFrom = (message) => {
     console.log(message)
@@ -283,20 +333,7 @@ class ManualConnection extends Component {
     }
   }
 
-  handleConfig = () => {
-    this.postData().then(data => {
-      if (data["result"][0] != false) {
-        data = data["result"]["device"]
-        let wifi_name, wifi_password, store_id, update_rate;
-        wifi_name = data["wifi_name"] ? `"wifi_name":"${data["wifi_name"]}",` : "";
-        wifi_password = data["wifi_password"] ? `"wifi_password":"${data["wifi_password"]}",` : "";
-        store_id = data["store_id"] ? `"store_id":"${data["store_id"]}",` : "";
-        update_rate = data["update_rate"] ? `"update_rate":"${data["update_rate"]}",` : "";
-        const config = `{<config::{${store_id}${update_rate}${wifi_name}${wifi_password}}>}`;
-        this.sendData(config)
-      }
-    }).catch(err => Alert.alert("err" + err))
-  }
+
 
   sendData = data => {
     RNSerialport.writeString(data + "\n");
@@ -372,7 +409,7 @@ class ManualConnection extends Component {
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style={styles.startButton}
+                    style={{ ...styles.startButton, backgroundColor: this.state.mac_address === "" ? '#C5C5C5' : "#66C200" }}
                     disabled={this.state.mac_address == ""}
                     onPress={() =>
                       this.setState({ configSaved: false, modalVisible: !this.state.modalVisible }, () => this.handleConfig())
@@ -388,7 +425,7 @@ class ManualConnection extends Component {
                   </TouchableOpacity>
 
                   <Modal
-                    animationType="slide"
+                    animationType="fade"
                     transparent={true}
                     visible={this.state.modalVisible}
                   >

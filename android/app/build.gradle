@@ -153,7 +153,7 @@ android {
         
         release {
             if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
-                storeFile file("my-upload-key.keystore")
+                storeFile file("my-release-key.keystore")
                 storePassword "112233"
                 keyAlias "myKey"
                 keyPassword "112233"
@@ -230,3 +230,6 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+
+
+
