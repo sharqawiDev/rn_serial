@@ -41,6 +41,7 @@ class ManualConnection extends Component {
       currentNetwork: "------",
       configSaved: false,
       modalVisible: false,
+      aboutVisible: false,
       vendor: "------",
       connectionMessage: ["", "black"],
       wifiState: "disconnected",
@@ -343,7 +344,6 @@ class ManualConnection extends Component {
   render() {
     const spinValue = new Animated.Value(0);
     const spinValue2 = new Animated.Value(0);
-
     Animated.loop(
       Animated.timing(
         spinValue,
@@ -383,25 +383,95 @@ class ManualConnection extends Component {
     return (
       <View style={styles.view}>
         <Header />
+        <Image source={require("./img/nana-box.png")} style={styles.nanaBox} />
+        <Text style={styles.nanaIoT}>Nana IoT</Text>
         {this.state.page == 0 &&
           <View style={styles.startButtons}>
             {
               !this.state.connected ?
                 <>
+
                   <TouchableOpacity style={[styles.startButton, styles.roundedButton]} onPress={() => {
                     this.handleConnection()
                   }}>
-                    <Text style={[styles.startButtonText, { marginLeft: 0, alignSelf: "center", fontSize: 22 }]}>
+                    <Text style={[styles.startButtonText, { marginLeft: 0, alignSelf: "center", fontSize: 22, fontWeight: "bold" }]}>
                       Connect
                   </Text>
                   </TouchableOpacity>
+                  <TouchableOpacity style={styles.roundedButton2} onPress={() => {
+                    this.setState({ aboutVisible: true })
+                  }}>
+                    <Text style={{ marginLeft: 0, alignSelf: "center", fontSize: 22 }}>
+                      i
+                  </Text>
+                  </TouchableOpacity>
                   <Text style={[styles.connectionMsg, { color: this.state.connectionMessage[1] }]}>{this.state.connectionMessage[0]}</Text>
+
+                  <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={this.state.aboutVisible}
+                  >
+                    <View style={styles.centeredView}>
+                      <View style={styles.modalView}>
+                        <View style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          paddingHorizontal: 10,
+                          borderTopLeftRadius: 8,
+                          borderTopRightRadius: 8,
+                          alignItems: "center",
+                          height: 40,
+                          paddingLeft: 0
+                        }}>
+                          <TouchableOpacity
+                            onPress={() => {
+                              this.setState({ aboutVisible: !this.state.aboutVisible })
+                            }}
+                            style={{ padding: 15 }}
+                          >
+                            <Text style={{
+                              fontSize: 23,
+                              color: "grey"
+                            }}>×</Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View style={{
+                          justifyContent: "center",
+                          alignItems: "center",
+                          marginRight: 40,
+                          height: '20%',
+                          flexDirection: "row"
+                        }}>
+                          <Image source={require("./img/logo.png")} style={{
+                            height: 50,
+                            width: 50,
+                            marginRight: 10,
+                            resizeMode: "center",
+                          }} />
+                          <Text style={{ fontWeight: "bold", fontSize: 17 }}>App Name</Text>
+                        </View>
+                        <View style={{
+                          marginLeft: 10,
+                          marginTop: 20
+                        }}>
+                          <Text>App Name</Text>
+                          <Text>Version 0.1 (Build 9.23.0741.00)</Text>
+                          <Text>Copyright © 2015-2020 Nana LTD.</Text>
+                          <Text>All rights reserved.{'\n'}</Text>
+                          <Text>Made with ❤️ by Ahmed & Abdulrahman</Text>
+                        </View>
+                      </View>
+                    </View>
+                  </Modal>
+
                 </>
                 :
 
                 <>
                   <TouchableOpacity style={styles.startButton} onPress={() => {
-                    this.setState({ page: 1 })
+                    this.setState({ page: 1, searching: true })
+                    this.sendData("{<wifi::list>}")
                   }
                   }>
                     <Text style={styles.startButtonText}>
@@ -412,7 +482,9 @@ class ManualConnection extends Component {
                     style={{ ...styles.startButton, backgroundColor: this.state.mac_address === "" ? '#C5C5C5' : "#66C200" }}
                     disabled={this.state.mac_address == ""}
                     onPress={() =>
-                      this.setState({ configSaved: false, modalVisible: !this.state.modalVisible }, () => this.handleConfig())
+                      this.setState({ configSaved: false, modalVisible: !this.state.modalVisible }, () => {
+                        // this.handleConfig()
+                      })
                     }>
                     <Text style={styles.startButtonText}>
                       Link with Store
@@ -438,18 +510,18 @@ class ManualConnection extends Component {
                           borderTopLeftRadius: 8,
                           borderTopRightRadius: 8,
                           alignItems: "center",
-                          backgroundColor: "#67B117",
                           height: 40,
+                          paddingLeft: 0
                         }}>
-                          <Text style={{ color: "white", fontWeight: "bold", fontSize: 17 }}>Link with Store</Text>
                           <TouchableOpacity
                             onPress={() => {
                               this.setState({ modalVisible: !this.state.modalVisible })
                             }}
+                            style={{ padding: 15 }}
                           >
                             <Text style={{
                               fontSize: 23,
-                              color: "white"
+                              color: "grey"
                             }}>×</Text>
                           </TouchableOpacity>
                         </View>
@@ -460,16 +532,15 @@ class ManualConnection extends Component {
                           {
                             this.state.configSaved ?
                               <>
-                                <Image source={require("./img/done.gif")} style={{ width: 80, height: 80, marginTop: 25 }} />
-                                <Text style={{ marginTop: 5, fontWeight: "bold", fontSize: 15 }}>Config Saved Successfully!</Text>
+                                <Image source={require("./img/done.png")} style={{ width: 80, height: 80, marginTop: 25 }} />
+                                <Text style={{ marginTop: 25, fontWeight: "bold", fontSize: 15, color: 'grey' }}>Config Saved Successfully!</Text>
                               </>
                               :
                               <>
-                                <Image source={require("./img/searching.gif")} style={{ width: 80, height: 80, marginTop: 25 }} />
-                                <Text style={{ marginTop: 5, fontWeight: "bold", fontSize: 15 }}>Loading...</Text>
+                                <Image source={require("./img/searching.gif")} style={{ width: 80, height: 80, marginTop: 25, opacity: 0.8 }} />
+                                <Text style={{ marginTop: 25, fontWeight: "bold", fontSize: 15, color: 'grey' }}>Loading...</Text>
                               </>
                           }
-
                         </View>
                       </View>
                     </View>
@@ -478,7 +549,8 @@ class ManualConnection extends Component {
             }
           </View>
         }
-        {this.state.page == 1 &&
+        {
+          this.state.page == 1 &&
           <View style={styles.main}>
             <View style={styles.row1}>
               <Text style={styles.deviceName}>{this.state.hostname}</Text>
@@ -530,7 +602,8 @@ class ManualConnection extends Component {
             </ScrollView>
           </View>
         }
-        {this.state.page == 2 &&
+        {
+          this.state.page == 2 &&
           <View style={styles.main}>
             <View style={styles.row1}>
               <Text style={styles.deviceName}>{this.state.hostname}</Text>
@@ -596,24 +669,46 @@ class ManualConnection extends Component {
             </View>
           </View>
         }
-      </View>
+      </View >
     );
   }
 }
 
 const styles = StyleSheet.create({
   view: {
-    flex: 1,
+    flex: 2,
     justifyContent: "space-between",
     flexDirection: "column",
     alignItems: "center",
     backgroundColor: "white",
   },
+  nanaIoT: {
+    width: 224,
+    height: 90,
+    position: "absolute",
+    fontFamily: "Helvetica",
+    fontSize: 53,
+    fontWeight: "bold",
+    fontStyle: "normal",
+    letterSpacing: 0,
+    color: "white",
+    textShadowColor: "rgba(0, 0, 0, 0.13)",
+    textShadowOffset: {
+      width: 0,
+      height: 2
+    },
+    textShadowRadius: 4,
+    top: '12.5%',
+  },
+  nanaBox: {
+    position: "absolute",
+    width: '100%',
+    height: '44%',
+    marginTop: '-12%'
+  },
   startButtons: {
-    width: 370 - 22,
-    height: 400,
-    marginTop: 330,
-    marginBottom: 15,
+    width: '90%',
+    height: '50%',
     justifyContent: "space-evenly"
   },
   roundedButton: {
@@ -623,6 +718,18 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     shadowColor: "#B6B6B6",
     elevation: 16,
+  },
+  roundedButton2: {
+    borderRadius: 300,
+    height: '10%',
+    backgroundColor: "white",
+    borderColor: "grey",
+    position: "absolute",
+    bottom: 15,
+    right: 0,
+    borderWidth: 0.5,
+    width: '10%',
+    alignSelf: "flex-end",
   },
   connectionMsg: {
     alignSelf: "center",
@@ -649,7 +756,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   centeredView: {
-    flex: 1,
+    flex: 2,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 22
@@ -671,7 +778,8 @@ const styles = StyleSheet.create({
   },
   main: {
     width: '90%',
-    height: 500,
+    height: '70%',
+    marginTop: '-100%',
     borderRadius: 8,
     backgroundColor: "#ffffff",
     shadowColor: "#B6B6B6",

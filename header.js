@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, Animated, Easing } from "react-native"
+import React from 'react'
+import { View, StyleSheet, Animated, Easing, Text } from "react-native"
 export default function header() {
     const spinValue = new Animated.Value(0);
     const spinValue2 = new Animated.Value(0);
@@ -10,7 +10,7 @@ export default function header() {
             spinValue,
             {
                 toValue: 1,
-                duration: 12000,
+                duration: 7000,
                 easing: Easing.linear,
                 useNativeDriver: true
             }
@@ -21,7 +21,7 @@ export default function header() {
             spinValue2,
             {
                 toValue: 1,
-                duration: 16000,
+                duration: 9000,
                 easing: Easing.linear,
                 useNativeDriver: true
             }
@@ -40,14 +40,18 @@ export default function header() {
 
     styles = StyleSheet.create({
         container: {
-            left: 170
+            left: '50%',
+            top: '-20%',
+            flex: 1,
+            minHeight: '30%',
+            maxHeight: '50%'
         },
         ec: {
-            width: 545,
-            height: 525,
+            width: '140%',
+            height: '134%',
             position: "absolute",
-            top: -200,
-            right: -80,
+            top: 0,
+            right: '-20%',
             opacity: 0.63,
             borderRadius: 300,
             backgroundColor: 'hsl(74,100%,62.9%)',
@@ -56,10 +60,10 @@ export default function header() {
             ]
         },
         ec2: {
-            width: 545,
-            height: 500,
+            width: '128%',
+            height: '140%',
             position: "absolute",
-            top: -200,
+            top: 0,
             right: 0,
             opacity: 0.7,
             borderRadius: 300,
@@ -69,25 +73,25 @@ export default function header() {
             ]
         },
         ec3: {
-            width: 500,
-            height: 600,
+            width: '128%',
+            height: '154%',
             position: "absolute",
-            top: -250,
-            right: -35,
+            top: '-10%',
+            right: '-9%',
             opacity: 1,
             borderRadius: 300,
             borderColor: "white",
-            borderWidth: 4,
+            borderWidth: 7,
             // backgroundColor: '#00ED11',
             transform: [
                 { scaleX: 1.8 }
             ]
-        }
+        },
+
     })
 
     return (
         <View style={styles.container}>
-            {/* <View style={styles.ec2}></View> */}
             <Animated.View style={[styles.ec2, { transform: [{ rotate: spin }] }]} />
             <Animated.View style={[styles.ec, {
                 transform: [{ rotate: spin2 }]
