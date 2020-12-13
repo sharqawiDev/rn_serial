@@ -3,14 +3,16 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '10.0'
 
-target 'rn_serial' do
+target 'NanaIoT' do
   config = use_native_modules!
 
   use_react_native!(:path => config["reactNativePath"])
 
   pod 'RNSVG', :path => '../node_modules/react-native-svg'
 
-  target 'rn_serialTests' do
+  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+
+  target 'NanaIoTTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -25,10 +27,10 @@ target 'rn_serial' do
   end
 end
 
-target 'rn_serial-tvOS' do
-  # Pods for rn_serial-tvOS
+target 'NanaIoT-tvOS' do
+  # Pods for NanaIoT-tvOS
 
-  target 'rn_serial-tvOSTests' do
+  target 'NanaIoT-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end

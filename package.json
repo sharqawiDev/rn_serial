@@ -1,5 +1,5 @@
 {
-  "name": "rn_serial",
+  "name": "NanaIoT",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -13,7 +13,8 @@
     "axios": "^0.21.0",
     "react": "16.13.1",
     "react-native": "0.63.3",
-    "react-native-serialport": "^1.3.1"
+    "react-native-serialport": "^1.3.1",
+    "react-native-splash-screen": "^3.0.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",

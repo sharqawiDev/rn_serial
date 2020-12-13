@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface rn_serialTests : XCTestCase
+@interface NanaIoTTests : XCTestCase
 
 @end
 
-@implementation rn_serialTests
+@implementation NanaIoTTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL(^)(UIView *view))test
 {

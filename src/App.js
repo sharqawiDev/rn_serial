@@ -12,12 +12,11 @@ import {
   Easing,
   Modal,
   Image,
+  StatusBar,
   DeviceEventEmitter,
 } from "react-native";
 import { RNSerialport, definitions, actions } from "react-native-serialport";
-// import TcpSocket from 'react-native-tcp-socket';
-
-// import axios from "axios"
+import SplashScreen from "react-native-splash-screen"
 
 import Header from "../header"
 class ManualConnection extends Component {
@@ -78,6 +77,7 @@ class ManualConnection extends Component {
   };
 
   componentDidMount() {
+    SplashScreen.hide()
     this.startUsbListener();
 
   }
@@ -145,7 +145,7 @@ class ManualConnection extends Component {
   }
   onServiceStopped() {
     this.setState({ servisStarted: false });
-    Alert.alert("service stopped");
+    // Alert.alert("service stopped");
   }
   onDeviceAttached() {
     this.setState({ usbAttached: true }, () => {
@@ -241,36 +241,7 @@ class ManualConnection extends Component {
       });
   }
 
-  // handleConfig = () => {
-  //   axios.post('https://nana.sa/api/update_last_scan_from_scanner',
-  //     JSON.stringify({
-  //       mac_address: this.state.mac_address,
-  //       serial_number: this.state.hostname,
-  //       is_all: true
-  //     })
-  //     , {
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       }
-  //     })
-  //     .then(function (response) {
-  //       let data = JSON.parse(JSON.stringify(response.data))
-  //       if (data["result"][0] != false) {
-  //         data = data["result"]["device"]
-  //         let wifi_name, wifi_password, store_id, update_rate;
-  //         wifi_name = data["wifi_name"] ? `"wifi_name":"${data["wifi_name"]}",` : "";
-  //         wifi_password = data["wifi_password"] ? `"wifi_password":"${data["wifi_password"]}",` : "";
-  //         store_id = data["store_id"] ? `"store_id":"${data["store_id"]}",` : "";
-  //         update_rate = data["update_rate"] ? `"update_rate":"${data["update_rate"]}",` : "";
-  //         const config = `{<config::{${store_id}${update_rate}${wifi_name}${wifi_password}}>}`;
-  //         this.sendData(config)
-  //         // console.log(config)
-  //       }
-  //     })
-  //     .catch(function (error) {
-  //       Alert.alert(error)
-  //     });
-  // }
+
 
   handleConnection = async () => {
     const isOpen = await RNSerialport.isOpen();
@@ -382,6 +353,9 @@ class ManualConnection extends Component {
 
     return (
       <View style={styles.view}>
+        <StatusBar
+          hidden
+        />
         <Header />
         <Image source={require("./img/nana-box.png")} style={styles.nanaBox} />
         <Text style={styles.nanaIoT}>Nana IoT</Text>
@@ -439,27 +413,39 @@ class ManualConnection extends Component {
                         <View style={{
                           justifyContent: "center",
                           alignItems: "center",
-                          marginRight: 40,
+                          // marginRight: 40,
                           height: '20%',
                           flexDirection: "row"
                         }}>
-                          <Image source={require("./img/logo.png")} style={{
-                            height: 50,
-                            width: 50,
+                          <Image source={require("./img/logo.jpg")} style={{
+                            height: 90,
+                            marginTop: 20,
+                            width: 90,
                             marginRight: 10,
                             resizeMode: "center",
                           }} />
-                          <Text style={{ fontWeight: "bold", fontSize: 17 }}>App Name</Text>
+                          {/* <Text style={{ fontWeight: "bold", fontSize: 25 }}>App Name</Text> */}
                         </View>
                         <View style={{
                           marginLeft: 10,
-                          marginTop: 20
+                          marginTop: 30,
+                          alignItems: "center",
                         }}>
-                          <Text>App Name</Text>
-                          <Text>Version 0.1 (Build 9.23.0741.00)</Text>
-                          <Text>Copyright © 2015-2020 Nana LTD.</Text>
-                          <Text>All rights reserved.{'\n'}</Text>
-                          <Text>Made with ❤️ by Ahmed & Abdulrahman</Text>
+                          <Text style={{
+                            alignItems: "center",
+                            textAlign: "center",
+                            marginBottom: 20,
+                            marginTop: 15,
+                            fontSize: 14
+                          }}>Made with ❤️ by Ahmed & Abdulrahman
+                             </Text>
+                          <Text style={{
+                            color: "grey",
+                            fontSize: 12,
+                            textAlign: "center"
+                          }}>
+                            Version 0.1 (Build 9.23.0741.00) {'\n'}Copyright © 2015-2020 Nana LTD.{'\n'}All rights reserved.{'\n'}{'\n'}
+                          </Text>
                         </View>
                       </View>
                     </View>
@@ -483,7 +469,7 @@ class ManualConnection extends Component {
                     disabled={this.state.mac_address == ""}
                     onPress={() =>
                       this.setState({ configSaved: false, modalVisible: !this.state.modalVisible }, () => {
-                        // this.handleConfig()
+                        this.handleConfig()
                       })
                     }>
                     <Text style={styles.startButtonText}>
@@ -683,7 +669,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   nanaIoT: {
-    width: 224,
+    width: '100%',
     height: 90,
     position: "absolute",
     fontFamily: "Helvetica",
@@ -692,13 +678,14 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     letterSpacing: 0,
     color: "white",
-    textShadowColor: "rgba(0, 0, 0, 0.13)",
+    textShadowColor: "rgba(0, 0, 0, 0.3)",
     textShadowOffset: {
       width: 0,
       height: 2
     },
-    textShadowRadius: 4,
+    textShadowRadius: 6,
     top: '12.5%',
+    left: '20%',
   },
   nanaBox: {
     position: "absolute",

@@ -7,19 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* rn_serialTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* rn_serialTests.m */; };
+		00E356F31AD99517003FC87E /* NanaIoTTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* NanaIoTTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		154A180152462831EE8A4DD1 /* libPods-rn_serial.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EEAFB8B5C40A70D39FE786FC /* libPods-rn_serial.a */; };
+		154A180152462831EE8A4DD1 /* libPods-NanaIoT.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EEAFB8B5C40A70D39FE786FC /* libPods-NanaIoT.a */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		2DCD954D1E0B4F2C00145EB5 /* rn_serialTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* rn_serialTests.m */; };
-		5C918BC93C2447D035B360D0 /* libPods-rn_serial-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B33D3031C446370E87E7631 /* libPods-rn_serial-tvOSTests.a */; };
+		2DCD954D1E0B4F2C00145EB5 /* NanaIoTTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* NanaIoTTests.m */; };
+		5C918BC93C2447D035B360D0 /* libPods-NanaIoT-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B33D3031C446370E87E7631 /* libPods-NanaIoT-tvOSTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		E347C070BA6EAC69D9F27E88 /* libPods-rn_serial-rn_serialTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36769332A01254066EE9D094 /* libPods-rn_serial-rn_serialTests.a */; };
-		E483A92DA27B620B9B1CF4A1 /* libPods-rn_serial-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E465C6E9874CC534F9757D91 /* libPods-rn_serial-tvOS.a */; };
+		E347C070BA6EAC69D9F27E88 /* libPods-NanaIoT-NanaIoTTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36769332A01254066EE9D094 /* libPods-NanaIoT-NanaIoTTests.a */; };
+		E483A92DA27B620B9B1CF4A1 /* libPods-NanaIoT-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E465C6E9874CC534F9757D91 /* libPods-NanaIoT-tvOS.a */; };
 		4419AEEDB854475B8F9631B9 /* nana box.png in Resources */ = {isa = PBXBuildFile; fileRef = 371F458196904029BCD02173 /* nana box.png */; };
 /* End PBXBuildFile section */
 
@@ -29,45 +29,45 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = rn_serial;
+			remoteInfo = NanaIoT;
 		};
 		2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
-			remoteInfo = "rn_serial-tvOS";
+			remoteInfo = "NanaIoT-tvOS";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		00E356EE1AD99517003FC87E /* rn_serialTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = rn_serialTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* NanaIoTTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NanaIoTTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* rn_serialTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = rn_serialTests.m; sourceTree = "<group>"; };
-		0B33D3031C446370E87E7631 /* libPods-rn_serial-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-rn_serial-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1257E5EACE08F1238CA55547 /* Pods-rn_serial-rn_serialTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rn_serial-rn_serialTests.release.xcconfig"; path = "Target Support Files/Pods-rn_serial-rn_serialTests/Pods-rn_serial-rn_serialTests.release.xcconfig"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* rn_serial.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = rn_serial.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = rn_serial/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = rn_serial/AppDelegate.m; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = rn_serial/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = rn_serial/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = rn_serial/main.m; sourceTree = "<group>"; };
-		2930CDF03246C3E0872090A8 /* Pods-rn_serial.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rn_serial.release.xcconfig"; path = "Target Support Files/Pods-rn_serial/Pods-rn_serial.release.xcconfig"; sourceTree = "<group>"; };
-		2D02E47B1E0B4A5D006451C7 /* rn_serial-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "rn_serial-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2D02E4901E0B4A5D006451C7 /* rn_serial-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "rn_serial-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2F3F2CD1CCDC77546A3B50DC /* Pods-rn_serial-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rn_serial-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-rn_serial-tvOS/Pods-rn_serial-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
-		36769332A01254066EE9D094 /* libPods-rn_serial-rn_serialTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-rn_serial-rn_serialTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		408489BB6D708A58510E4A31 /* Pods-rn_serial-rn_serialTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rn_serial-rn_serialTests.debug.xcconfig"; path = "Target Support Files/Pods-rn_serial-rn_serialTests/Pods-rn_serial-rn_serialTests.debug.xcconfig"; sourceTree = "<group>"; };
-		6E8376520E090D5F75DE81BC /* Pods-rn_serial-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rn_serial-tvOS.release.xcconfig"; path = "Target Support Files/Pods-rn_serial-tvOS/Pods-rn_serial-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = rn_serial/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		B2CFCEEE8C9E142F7025D03A /* Pods-rn_serial-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rn_serial-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-rn_serial-tvOSTests/Pods-rn_serial-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		C74C4B24FFD7E552F65AE6FC /* Pods-rn_serial.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rn_serial.debug.xcconfig"; path = "Target Support Files/Pods-rn_serial/Pods-rn_serial.debug.xcconfig"; sourceTree = "<group>"; };
-		E465C6E9874CC534F9757D91 /* libPods-rn_serial-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-rn_serial-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		EA5B44C8332A24B46E4A9362 /* Pods-rn_serial-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rn_serial-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-rn_serial-tvOSTests/Pods-rn_serial-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* NanaIoTTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NanaIoTTests.m; sourceTree = "<group>"; };
+		0B33D3031C446370E87E7631 /* libPods-NanaIoT-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NanaIoT-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1257E5EACE08F1238CA55547 /* Pods-NanaIoT-NanaIoTTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NanaIoT-NanaIoTTests.release.xcconfig"; path = "Target Support Files/Pods-NanaIoT-NanaIoTTests/Pods-NanaIoT-NanaIoTTests.release.xcconfig"; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* NanaIoT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NanaIoT.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = NanaIoT/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = NanaIoT/AppDelegate.m; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = NanaIoT/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = NanaIoT/Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = NanaIoT/main.m; sourceTree = "<group>"; };
+		2930CDF03246C3E0872090A8 /* Pods-NanaIoT.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NanaIoT.release.xcconfig"; path = "Target Support Files/Pods-NanaIoT/Pods-NanaIoT.release.xcconfig"; sourceTree = "<group>"; };
+		2D02E47B1E0B4A5D006451C7 /* NanaIoT-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "NanaIoT-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D02E4901E0B4A5D006451C7 /* NanaIoT-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "NanaIoT-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F3F2CD1CCDC77546A3B50DC /* Pods-NanaIoT-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NanaIoT-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-NanaIoT-tvOS/Pods-NanaIoT-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		36769332A01254066EE9D094 /* libPods-NanaIoT-NanaIoTTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NanaIoT-NanaIoTTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		408489BB6D708A58510E4A31 /* Pods-NanaIoT-NanaIoTTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NanaIoT-NanaIoTTests.debug.xcconfig"; path = "Target Support Files/Pods-NanaIoT-NanaIoTTests/Pods-NanaIoT-NanaIoTTests.debug.xcconfig"; sourceTree = "<group>"; };
+		6E8376520E090D5F75DE81BC /* Pods-NanaIoT-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NanaIoT-tvOS.release.xcconfig"; path = "Target Support Files/Pods-NanaIoT-tvOS/Pods-NanaIoT-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = NanaIoT/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		B2CFCEEE8C9E142F7025D03A /* Pods-NanaIoT-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NanaIoT-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-NanaIoT-tvOSTests/Pods-NanaIoT-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		C74C4B24FFD7E552F65AE6FC /* Pods-NanaIoT.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NanaIoT.debug.xcconfig"; path = "Target Support Files/Pods-NanaIoT/Pods-NanaIoT.debug.xcconfig"; sourceTree = "<group>"; };
+		E465C6E9874CC534F9757D91 /* libPods-NanaIoT-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NanaIoT-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA5B44C8332A24B46E4A9362 /* Pods-NanaIoT-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NanaIoT-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-NanaIoT-tvOSTests/Pods-NanaIoT-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
-		EEAFB8B5C40A70D39FE786FC /* libPods-rn_serial.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-rn_serial.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EEAFB8B5C40A70D39FE786FC /* libPods-NanaIoT.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NanaIoT.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		371F458196904029BCD02173 /* nana box.png */ = {isa = PBXFileReference; name = "nana box.png"; path = "../assets/images/nana box.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
@@ -76,7 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E347C070BA6EAC69D9F27E88 /* libPods-rn_serial-rn_serialTests.a in Frameworks */,
+				E347C070BA6EAC69D9F27E88 /* libPods-NanaIoT-NanaIoTTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,7 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				154A180152462831EE8A4DD1 /* libPods-rn_serial.a in Frameworks */,
+				154A180152462831EE8A4DD1 /* libPods-NanaIoT.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,7 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E483A92DA27B620B9B1CF4A1 /* libPods-rn_serial-tvOS.a in Frameworks */,
+				E483A92DA27B620B9B1CF4A1 /* libPods-NanaIoT-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,20 +100,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5C918BC93C2447D035B360D0 /* libPods-rn_serial-tvOSTests.a in Frameworks */,
+				5C918BC93C2447D035B360D0 /* libPods-NanaIoT-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* rn_serialTests */ = {
+		00E356EF1AD99517003FC87E /* NanaIoTTests */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F21AD99517003FC87E /* rn_serialTests.m */,
+				00E356F21AD99517003FC87E /* NanaIoTTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			path = rn_serialTests;
+			path = NanaIoTTests;
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
@@ -124,7 +124,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* rn_serial */ = {
+		13B07FAE1A68108700A75B9A /* NanaIoT */ = {
 			isa = PBXGroup;
 			children = (
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -135,7 +135,7 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
-			name = rn_serial;
+			name = NanaIoT;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
@@ -143,10 +143,10 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				EEAFB8B5C40A70D39FE786FC /* libPods-rn_serial.a */,
-				36769332A01254066EE9D094 /* libPods-rn_serial-rn_serialTests.a */,
-				E465C6E9874CC534F9757D91 /* libPods-rn_serial-tvOS.a */,
-				0B33D3031C446370E87E7631 /* libPods-rn_serial-tvOSTests.a */,
+				EEAFB8B5C40A70D39FE786FC /* libPods-NanaIoT.a */,
+				36769332A01254066EE9D094 /* libPods-NanaIoT-NanaIoTTests.a */,
+				E465C6E9874CC534F9757D91 /* libPods-NanaIoT-tvOS.a */,
+				0B33D3031C446370E87E7631 /* libPods-NanaIoT-tvOSTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -161,9 +161,9 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				13B07FAE1A68108700A75B9A /* rn_serial */,
+				13B07FAE1A68108700A75B9A /* NanaIoT */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* rn_serialTests */,
+				00E356EF1AD99517003FC87E /* NanaIoTTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				DCFE9081DD15C366C289D722 /* Pods */,
@@ -177,10 +177,10 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* rn_serial.app */,
-				00E356EE1AD99517003FC87E /* rn_serialTests.xctest */,
-				2D02E47B1E0B4A5D006451C7 /* rn_serial-tvOS.app */,
-				2D02E4901E0B4A5D006451C7 /* rn_serial-tvOSTests.xctest */,
+				13B07F961A680F5B00A75B9A /* NanaIoT.app */,
+				00E356EE1AD99517003FC87E /* NanaIoTTests.xctest */,
+				2D02E47B1E0B4A5D006451C7 /* NanaIoT-tvOS.app */,
+				2D02E4901E0B4A5D006451C7 /* NanaIoT-tvOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -188,14 +188,14 @@
 		DCFE9081DD15C366C289D722 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				C74C4B24FFD7E552F65AE6FC /* Pods-rn_serial.debug.xcconfig */,
-				2930CDF03246C3E0872090A8 /* Pods-rn_serial.release.xcconfig */,
-				408489BB6D708A58510E4A31 /* Pods-rn_serial-rn_serialTests.debug.xcconfig */,
-				1257E5EACE08F1238CA55547 /* Pods-rn_serial-rn_serialTests.release.xcconfig */,
-				2F3F2CD1CCDC77546A3B50DC /* Pods-rn_serial-tvOS.debug.xcconfig */,
-				6E8376520E090D5F75DE81BC /* Pods-rn_serial-tvOS.release.xcconfig */,
-				B2CFCEEE8C9E142F7025D03A /* Pods-rn_serial-tvOSTests.debug.xcconfig */,
-				EA5B44C8332A24B46E4A9362 /* Pods-rn_serial-tvOSTests.release.xcconfig */,
+				C74C4B24FFD7E552F65AE6FC /* Pods-NanaIoT.debug.xcconfig */,
+				2930CDF03246C3E0872090A8 /* Pods-NanaIoT.release.xcconfig */,
+				408489BB6D708A58510E4A31 /* Pods-NanaIoT-NanaIoTTests.debug.xcconfig */,
+				1257E5EACE08F1238CA55547 /* Pods-NanaIoT-NanaIoTTests.release.xcconfig */,
+				2F3F2CD1CCDC77546A3B50DC /* Pods-NanaIoT-tvOS.debug.xcconfig */,
+				6E8376520E090D5F75DE81BC /* Pods-NanaIoT-tvOS.release.xcconfig */,
+				B2CFCEEE8C9E142F7025D03A /* Pods-NanaIoT-tvOSTests.debug.xcconfig */,
+				EA5B44C8332A24B46E4A9362 /* Pods-NanaIoT-tvOSTests.release.xcconfig */,
 			);
 			name = Pods;
 			path = Pods;
@@ -213,9 +213,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* rn_serialTests */ = {
+		00E356ED1AD99517003FC87E /* NanaIoTTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "rn_serialTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "NanaIoTTests" */;
 			buildPhases = (
 				752C340C515E57174C61F5EB /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
@@ -228,14 +228,14 @@
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = rn_serialTests;
-			productName = rn_serialTests;
-			productReference = 00E356EE1AD99517003FC87E /* rn_serialTests.xctest */;
+			name = NanaIoTTests;
+			productName = NanaIoTTests;
+			productReference = 00E356EE1AD99517003FC87E /* NanaIoTTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* rn_serial */ = {
+		13B07F861A680F5B00A75B9A /* NanaIoT */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "rn_serial" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "NanaIoT" */;
 			buildPhases = (
 				CDD1745A16433B538B0F4E85 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
@@ -249,14 +249,14 @@
 			);
 			dependencies = (
 			);
-			name = rn_serial;
-			productName = rn_serial;
-			productReference = 13B07F961A680F5B00A75B9A /* rn_serial.app */;
+			name = NanaIoT;
+			productName = NanaIoT;
+			productReference = 13B07F961A680F5B00A75B9A /* NanaIoT.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E47A1E0B4A5D006451C7 /* rn_serial-tvOS */ = {
+		2D02E47A1E0B4A5D006451C7 /* NanaIoT-tvOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "rn_serial-tvOS" */;
+			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "NanaIoT-tvOS" */;
 			buildPhases = (
 				426C6404CDFF20750596AA80 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F122414F3F0027D42C /* Start Packager */,
@@ -269,14 +269,14 @@
 			);
 			dependencies = (
 			);
-			name = "rn_serial-tvOS";
-			productName = "rn_serial-tvOS";
-			productReference = 2D02E47B1E0B4A5D006451C7 /* rn_serial-tvOS.app */;
+			name = "NanaIoT-tvOS";
+			productName = "NanaIoT-tvOS";
+			productReference = 2D02E47B1E0B4A5D006451C7 /* NanaIoT-tvOS.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E48F1E0B4A5D006451C7 /* rn_serial-tvOSTests */ = {
+		2D02E48F1E0B4A5D006451C7 /* NanaIoT-tvOSTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "rn_serial-tvOSTests" */;
+			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "NanaIoT-tvOSTests" */;
 			buildPhases = (
 				EF77D6F7613529D662C72B5A /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
@@ -288,9 +288,9 @@
 			dependencies = (
 				2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */,
 			);
-			name = "rn_serial-tvOSTests";
-			productName = "rn_serial-tvOSTests";
-			productReference = 2D02E4901E0B4A5D006451C7 /* rn_serial-tvOSTests.xctest */;
+			name = "NanaIoT-tvOSTests";
+			productName = "NanaIoT-tvOSTests";
+			productReference = 2D02E4901E0B4A5D006451C7 /* NanaIoT-tvOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -319,7 +319,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "rn_serial" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "NanaIoT" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -332,10 +332,10 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* rn_serial */,
-				00E356ED1AD99517003FC87E /* rn_serialTests */,
-				2D02E47A1E0B4A5D006451C7 /* rn_serial-tvOS */,
-				2D02E48F1E0B4A5D006451C7 /* rn_serial-tvOSTests */,
+				13B07F861A680F5B00A75B9A /* NanaIoT */,
+				00E356ED1AD99517003FC87E /* NanaIoTTests */,
+				2D02E47A1E0B4A5D006451C7 /* NanaIoT-tvOS */,
+				2D02E48F1E0B4A5D006451C7 /* NanaIoT-tvOSTests */,
 			);
 		};
 /* End PBXProject section */
@@ -396,7 +396,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-rn_serial-rn_serialTests/Pods-rn_serial-rn_serialTests-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-NanaIoT-NanaIoTTests/Pods-NanaIoT-NanaIoTTests-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -405,7 +405,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-rn_serial-rn_serialTests/Pods-rn_serial-rn_serialTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NanaIoT-NanaIoTTests/Pods-NanaIoT-NanaIoTTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
@@ -437,7 +437,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-rn_serial-tvOS-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-NanaIoT-tvOS-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -459,7 +459,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-rn_serial-rn_serialTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-NanaIoT-NanaIoTTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -472,7 +472,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-rn_serial/Pods-rn_serial-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-NanaIoT/Pods-NanaIoT-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -481,7 +481,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-rn_serial/Pods-rn_serial-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NanaIoT/Pods-NanaIoT-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		CDD1745A16433B538B0F4E85 /* [CP] Check Pods Manifest.lock */ = {
@@ -499,7 +499,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-rn_serial-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-NanaIoT-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -521,7 +521,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-rn_serial-tvOSTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-NanaIoT-tvOSTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -573,7 +573,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* rn_serialTests.m in Sources */,
+				00E356F31AD99517003FC87E /* NanaIoTTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -599,7 +599,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2DCD954D1E0B4F2C00145EB5 /* rn_serialTests.m in Sources */,
+				2DCD954D1E0B4F2C00145EB5 /* NanaIoTTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -608,12 +608,12 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* rn_serial */;
+			target = 13B07F861A680F5B00A75B9A /* NanaIoT */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 		2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2D02E47A1E0B4A5D006451C7 /* rn_serial-tvOS */;
+			target = 2D02E47A1E0B4A5D006451C7 /* NanaIoT-tvOS */;
 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -621,14 +621,14 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 408489BB6D708A58510E4A31 /* Pods-rn_serial-rn_serialTests.debug.xcconfig */;
+			baseConfigurationReference = 408489BB6D708A58510E4A31 /* Pods-NanaIoT-NanaIoTTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = rn_serialTests/Info.plist;
+				INFOPLIST_FILE = NanaIoTTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -638,17 +638,17 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/rn_serial.app/rn_serial";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NanaIoT.app/NanaIoT";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1257E5EACE08F1238CA55547 /* Pods-rn_serial-rn_serialTests.release.xcconfig */;
+			baseConfigurationReference = 1257E5EACE08F1238CA55547 /* Pods-NanaIoT-NanaIoTTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = rn_serialTests/Info.plist;
+				INFOPLIST_FILE = NanaIoTTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -658,19 +658,19 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/rn_serial.app/rn_serial";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NanaIoT.app/NanaIoT";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C74C4B24FFD7E552F65AE6FC /* Pods-rn_serial.debug.xcconfig */;
+			baseConfigurationReference = C74C4B24FFD7E552F65AE6FC /* Pods-NanaIoT.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = rn_serial/Info.plist;
+				INFOPLIST_FILE = NanaIoT/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -678,7 +678,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = rn_serial;
+				PRODUCT_NAME = NanaIoT;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -687,12 +687,12 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2930CDF03246C3E0872090A8 /* Pods-rn_serial.release.xcconfig */;
+			baseConfigurationReference = 2930CDF03246C3E0872090A8 /* Pods-NanaIoT.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				INFOPLIST_FILE = rn_serial/Info.plist;
+				INFOPLIST_FILE = NanaIoT/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -700,7 +700,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = rn_serial;
+				PRODUCT_NAME = NanaIoT;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -708,7 +708,7 @@
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2F3F2CD1CCDC77546A3B50DC /* Pods-rn_serial-tvOS.debug.xcconfig */;
+			baseConfigurationReference = 2F3F2CD1CCDC77546A3B50DC /* Pods-NanaIoT-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -719,14 +719,14 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "rn_serial-tvOS/Info.plist";
+				INFOPLIST_FILE = "NanaIoT-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.rn_serial-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.NanaIoT-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -736,7 +736,7 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6E8376520E090D5F75DE81BC /* Pods-rn_serial-tvOS.release.xcconfig */;
+			baseConfigurationReference = 6E8376520E090D5F75DE81BC /* Pods-NanaIoT-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -747,14 +747,14 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "rn_serial-tvOS/Info.plist";
+				INFOPLIST_FILE = "NanaIoT-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.rn_serial-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.NanaIoT-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -764,7 +764,7 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B2CFCEEE8C9E142F7025D03A /* Pods-rn_serial-tvOSTests.debug.xcconfig */;
+			baseConfigurationReference = B2CFCEEE8C9E142F7025D03A /* Pods-NanaIoT-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -774,24 +774,24 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "rn_serial-tvOSTests/Info.plist";
+				INFOPLIST_FILE = "NanaIoT-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.rn_serial-tvOSTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.NanaIoT-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/rn_serial-tvOS.app/rn_serial-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NanaIoT-tvOS.app/NanaIoT-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Debug;
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EA5B44C8332A24B46E4A9362 /* Pods-rn_serial-tvOSTests.release.xcconfig */;
+			baseConfigurationReference = EA5B44C8332A24B46E4A9362 /* Pods-NanaIoT-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -801,17 +801,17 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "rn_serial-tvOSTests/Info.plist";
+				INFOPLIST_FILE = "NanaIoT-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.rn_serial-tvOSTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.NanaIoT-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/rn_serial-tvOS.app/rn_serial-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NanaIoT-tvOS.app/NanaIoT-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Release;
@@ -932,7 +932,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "rn_serialTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "NanaIoTTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -941,7 +941,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "rn_serial" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "NanaIoT" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -950,7 +950,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "rn_serial-tvOS" */ = {
+		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "NanaIoT-tvOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2D02E4971E0B4A5E006451C7 /* Debug */,
@@ -959,7 +959,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "rn_serial-tvOSTests" */ = {
+		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "NanaIoT-tvOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2D02E4991E0B4A5E006451C7 /* Debug */,
@@ -968,7 +968,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "rn_serial" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "NanaIoT" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
