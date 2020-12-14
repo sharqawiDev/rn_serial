@@ -358,7 +358,8 @@ class ManualConnection extends Component {
         />
         <Header />
         <Image source={require("./img/nana-box.png")} style={styles.nanaBox} />
-        <Text style={styles.nanaIoT}>Nana IoT</Text>
+        {/* <Text style={styles.nanaIoT}>Nana IoT</Text> */}
+        <Image source={require("./img/nanaiot.png")} style={styles.nanaIoT} />
         {this.state.page == 0 &&
           <View style={styles.startButtons}>
             {
@@ -669,23 +670,12 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   nanaIoT: {
-    width: '100%',
+    width: '70%',
+    resizeMode: "center",
     height: 90,
     position: "absolute",
-    fontFamily: "Helvetica",
-    fontSize: 53,
-    fontWeight: "bold",
-    fontStyle: "normal",
-    letterSpacing: 0,
-    color: "white",
-    textShadowColor: "rgba(0, 0, 0, 0.3)",
-    textShadowOffset: {
-      width: 0,
-      height: 2
-    },
-    textShadowRadius: 6,
     top: '12.5%',
-    left: '20%',
+    // left: '20%',
   },
   nanaBox: {
     position: "absolute",
